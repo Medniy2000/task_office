@@ -1,0 +1,49 @@
+*.py[cod]
+
+# C extensions
+*.so
+
+.idea/*
+# Local development ignores
+venv
+data.sqlite
+
+# Production config
+local.cfg
+
+# Static
+static/libs/*
+
+# Packages
+*.egg
+*.egg-info
+dist
+build
+eggs
+parts
+bin
+var
+sdist
+develop-eggs
+.installed.cfg
+lib
+lib64
+
+# Installer logs
+pip-log.txt
+
+# Unit test / coverage reports
+.coverage
+.tox
+nosetests.xml
+htmlcov
+
+# Translations
+*.mo
+
+# Complexity
+output/*.html
+output/*/index.html
+
+# Sphinx
+docs/_build
