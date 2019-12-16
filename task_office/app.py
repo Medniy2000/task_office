@@ -3,7 +3,7 @@
 from flask import Flask
 from task_office.extensions import bcrypt, cache, db, migrate, cors
 
-from task_office import commands
+from task_office import commands, auth
 from task_office.settings import ProdConfig
 from task_office.exceptions import InvalidUsage
 
@@ -36,9 +36,9 @@ def register_extensions(app):
 def register_blueprints(app):
     """Register Flask blueprints."""
     origins = app.config.get("CORS_ORIGIN_WHITELIST", "*")
-    # cors.init_app(articles.views.blueprint, origins=origins)
+    cors.init_app(auth.views.blueprint, origins=origins)
 
-    # app.register_blueprint(articles.views.blueprint)
+    app.register_blueprint(auth.views.blueprint)
 
 
 def register_errorhandlers(app):

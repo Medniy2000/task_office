@@ -8,6 +8,7 @@ class Config(object):
     """Base configuration."""
 
     SECRET_KEY = os.environ.get("CONDUIT_SECRET", "secret-key")  # TODO: Change me
+    API_V1_PREFIX = "/api/v1"
     APP_DIR = os.path.abspath(os.path.dirname(__file__))  # This directory
     PROJECT_ROOT = os.path.abspath(os.path.join(APP_DIR, os.pardir))
     BCRYPT_LOG_ROUNDS = 13
@@ -32,7 +33,6 @@ class Config(object):
 class ProdConfig(Config):
     """Production configuration."""
 
-    ENV = "PROD"
     DEBUG = False
     DATABASE = {
         "DB_NAME": os.environ.get("POSTGRES_DB", "task_office"),
@@ -41,7 +41,7 @@ class ProdConfig(Config):
         "DB_HOST": os.environ.get("POSTGRES_HOST", "127.0.0.1"),
         "DB_PORT": os.environ.get("POSTGRES_PORT", "5432"),
     }
-    SQLALCHEMY_DATABASE_URI = "psql://{username}:{password}@{host}:{db_port}/{db_name}".format(
+    SQLALCHEMY_DATABASE_URI = "postgresql://{username}:{password}@{host}:{db_port}/{db_name}".format(
         username=DATABASE["DB_USER"],
         password=DATABASE["DB_PASSWORD"],
         host=DATABASE["DB_HOST"],
@@ -53,7 +53,6 @@ class ProdConfig(Config):
 class DevConfig(Config):
     """Development configuration."""
 
-    ENV = "DEV"
     DEBUG = True
     # Put the db file in project root
     DATABASE = {
@@ -63,7 +62,7 @@ class DevConfig(Config):
         "DB_HOST": os.environ.get("POSTGRES_HOST", "127.0.0.1"),
         "DB_PORT": os.environ.get("POSTGRES_PORT", "5432"),
     }
-    SQLALCHEMY_DATABASE_URI = "psql://{username}:{password}@{host}:{db_port}/{db_name}".format(
+    SQLALCHEMY_DATABASE_URI = "postgresql://{username}:{password}@{host}:{db_port}/{db_name}".format(
         username=DATABASE["DB_USER"],
         password=DATABASE["DB_PASSWORD"],
         host=DATABASE["DB_HOST"],
@@ -86,7 +85,7 @@ class TestConfig(Config):
         "DB_HOST": os.environ.get("POSTGRES_HOST", "127.0.0.1"),
         "DB_PORT": os.environ.get("POSTGRES_PORT", "5432"),
     }
-    SQLALCHEMY_DATABASE_URI = "psql://{username}:{password}@{host}:{db_port}/{db_name}".format(
+    SQLALCHEMY_DATABASE_URI = "postgresql:://{username}:{password}@{host}:{db_port}/{db_name}".format(
         username=DATABASE["DB_USER"],
         password=DATABASE["DB_PASSWORD"],
         host=DATABASE["DB_HOST"],
@@ -94,3 +93,14 @@ class TestConfig(Config):
         db_name=DATABASE["DB_NAME"],
     )
     BCRYPT_LOG_ROUNDS = 4
+
+
+MODE = os.environ.get("MODE")
+
+configurations = {
+    "dev": DevConfig,
+    "prod": ProdConfig,
+    "test": TestConfig
+}
+
+CONFIG = configurations.get(MODE, "dev")
