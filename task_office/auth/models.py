@@ -10,11 +10,12 @@ class User(PKMixin, DTMixin, Model):
     __tablename__ = "users"
 
     username = Column(db.String(80), unique=True, nullable=False)
-    email = Column(db.String(100), unique=True, nullable=False)
-    password = Column(db.Binary(128), nullable=True)
+    email = Column(db.String(255), unique=True, nullable=False, index=True)
     bio = Column(db.String(300), nullable=True)
-    image = Column(db.String(120), nullable=True)
-    token: str = ""
+    phone = Column(db.String(300), nullable=True)
+    password = Column(db.Binary(128), nullable=True)
+    is_active = Column(db.Boolean(), default=True)
+    is_superuser = Column(db.Boolean(), default=False)
 
     def __init__(self, username, email, password=None, **kwargs):
         """Create instance."""

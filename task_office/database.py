@@ -24,7 +24,7 @@ class PKMixin(object):
     __table_args__ = {"extend_existing": True}
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    uuid = db.Column(UUID, primary_key=True, default=uuid.uuid4())
+    uuid = db.Column(UUID, primary_key=True, default=uuid.uuid4().__str__())
     meta = db.Column(JSON, default=dict)
 
     @classmethod
@@ -52,17 +52,4 @@ class DTMixin(object):
         nullable=False,
         default=dt.datetime.utcnow,
         onupdate=dt.datetime.utcnow,
-    )
-
-
-def reference_col(tablename, nullable=False, pk_name="id", **kwargs):
-    """Column that adds primary key foreign key reference.
-
-    Usage: ::
-
-        category_id = reference_col('category')
-        category = relationship('Category', backref='categories')
-    """
-    return db.Column(
-        db.ForeignKey("{0}.{1}".format(tablename, pk_name)), nullable=nullable, **kwargs
     )

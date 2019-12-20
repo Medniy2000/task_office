@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 """The app module, containing the app factory function."""
 from flask import Flask
-from task_office.extensions import bcrypt, cache, db, migrate, cors
 
 from task_office import commands, auth
-from task_office.settings import ProdConfig
 from task_office.exceptions import InvalidUsage
+from task_office.extensions import bcrypt, cache, db, migrate, cors
 
 
-def create_app(config_object=ProdConfig):
+def create_app(config_object):
     """An application factory, as explained here:
     http://flask.pocoo.org/docs/patterns/appfactories/.
 

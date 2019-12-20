@@ -1,22 +1,22 @@
 # -*- coding: utf-8 -*-
 """Application configuration."""
 import os
-from datetime import timedelta
 
 
 class Config(object):
     """Base configuration."""
 
-    SECRET_KEY = os.environ.get("CONDUIT_SECRET", "secret-key")  # TODO: Change me
-    API_V1_PREFIX = "/api/v1"
+    PROJECT_NAME = os.environ.get("PROJECT_NAME", "Task Office")
+
     APP_DIR = os.path.abspath(os.path.dirname(__file__))  # This directory
     PROJECT_ROOT = os.path.abspath(os.path.join(APP_DIR, os.pardir))
-    BCRYPT_LOG_ROUNDS = 13
+
+    SECRET_KEY = os.environ.get("CONDUIT_SECRET", "secret-key")  # TODO: Change me
+    API_V1_PREFIX = "/api/v1"
+
     DEBUG_TB_INTERCEPT_REDIRECTS = False
-    CACHE_TYPE = "simple"  # Can be "memcached", "redis", etc.
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    JWT_AUTH_USERNAME_KEY = "email"
-    JWT_AUTH_HEADER_PREFIX = "Token"
+
     CORS_ORIGIN_WHITELIST = [
         "http://0.0.0.0:4100",
         "http://localhost:4100",
@@ -27,7 +27,6 @@ class Config(object):
         "http://0.0.0.0:4000",
         "http://localhost:4000",
     ]
-    JWT_HEADER_TYPE = "Token"
 
 
 class ProdConfig(Config):
@@ -70,7 +69,6 @@ class DevConfig(Config):
         db_name=DATABASE["DB_NAME"],
     )
     CACHE_TYPE = "simple"  # Can be "memcached", "redis", etc.
-    JWT_ACCESS_TOKEN_EXPIRES = timedelta(10 ** 6)
 
 
 class TestConfig(Config):
@@ -92,15 +90,10 @@ class TestConfig(Config):
         db_port=DATABASE["DB_PORT"],
         db_name=DATABASE["DB_NAME"],
     )
-    BCRYPT_LOG_ROUNDS = 4
 
 
-MODE = os.environ.get("MODE")
+MODE = os.environ.get("MODE", default="dev")
 
-configurations = {
-    "dev": DevConfig,
-    "prod": ProdConfig,
-    "test": TestConfig
-}
+configurations = {"dev": DevConfig, "prod": ProdConfig, "test": TestConfig}
 
-CONFIG = configurations.get(MODE, "dev")
+CONFIG = configurations.get(MODE)
