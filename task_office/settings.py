@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Application configuration."""
 import os
+from datetime import timedelta
 
 
 class Config(object):
@@ -27,6 +28,13 @@ class Config(object):
         "http://0.0.0.0:4000",
         "http://localhost:4000",
     ]
+
+    # JWT
+    JWT_AUTH_USERNAME_KEY = "uuid"
+    JWT_AUTH_HEADER_PREFIX = "Bearer"
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=30)
+    JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=7)
+    JWT_BLACKLIST_TOKEN_CHECKS = ["access", "refresh"]
 
 
 class ProdConfig(Config):

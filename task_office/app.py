@@ -4,7 +4,7 @@ from flask import Flask
 
 from task_office import commands, auth
 from task_office.exceptions import InvalidUsage
-from task_office.extensions import bcrypt, cache, db, migrate, cors
+from task_office.extensions import bcrypt, cache, db, migrate, cors, jwt
 
 
 def create_app(config_object):
@@ -36,8 +36,8 @@ def register_blueprints(app):
     """Register Flask blueprints."""
     origins = app.config.get("CORS_ORIGIN_WHITELIST", "*")
     cors.init_app(auth.views.blueprint, origins=origins)
-
     app.register_blueprint(auth.views.blueprint)
+    jwt.init_app(app)
 
 
 def register_errorhandlers(app):
