@@ -3,16 +3,26 @@
 import os
 from datetime import timedelta
 
+from environs import Env
+
+env = Env()
+
 
 class Config(object):
     """Base configuration."""
 
-    PROJECT_NAME = os.environ.get("PROJECT_NAME", "Task Office")
-
-    APP_DIR = os.path.abspath(os.path.dirname(__file__))  # This directory
+    APP_DIR = os.path.abspath(os.path.dirname(__file__))
     PROJECT_ROOT = os.path.abspath(os.path.join(APP_DIR, os.pardir))
 
-    SECRET_KEY = os.environ.get("CONDUIT_SECRET", "secret-key")  # TODO: Change me
+    READ_DOT_ENV_FILE = env.bool("FLASK_READ_DOT_ENV_FILE", default=True)
+    if READ_DOT_ENV_FILE:
+        # OS environment variables take precedence over variables from .env
+        env.read_env(os.path.join(PROJECT_ROOT, ".env"))
+
+    FLASK_DEBUG = env.int("FLASK_DEBUG", 0)
+
+    PROJECT_NAME = env.str("PROJECT_NAME", "Task Office")
+    SECRET_KEY = env.str("FLASK_SECRET", "secret-key")
     API_V1_PREFIX = "/api/v1"
 
     DEBUG_TB_INTERCEPT_REDIRECTS = False
@@ -32,76 +42,41 @@ class Config(object):
     # JWT
     JWT_AUTH_USERNAME_KEY = "uuid"
     JWT_AUTH_HEADER_PREFIX = "Bearer"
-    JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=30)
-    JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=7)
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(
+        minutes=env.int("JWT_ACCESS_TOKEN_EXPIRES", 30)
+    )
+    JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=env.int("JWT_REFRESH_TOKEN_EXPIRES", 7))
     JWT_BLACKLIST_TOKEN_CHECKS = ["access", "refresh"]
+
+    # DB
+    DATABASE = {
+        "DB_NAME": env.str("POSTGRES_DB", "task_office"),
+        "DB_USER": env.str("POSTGRES_USER", "task_office_user"),
+        "DB_PASSWORD": env.str("POSTGRES_PASSWORD", "task_office_user"),
+        "DB_HOST": env.str("POSTGRES_HOST", "127.0.0.1"),
+        "DB_PORT": env.int("POSTGRES_PORT", "5432"),
+    }
+    SQLALCHEMY_DATABASE_URI = "postgresql://{username}:{password}@{host}:{db_port}/{db_name}".format(
+        username=DATABASE["DB_USER"],
+        password=DATABASE["DB_PASSWORD"],
+        host=DATABASE["DB_HOST"],
+        db_port=DATABASE["DB_PORT"],
+        db_name=DATABASE["DB_NAME"],
+    )
 
 
 class ProdConfig(Config):
     """Production configuration."""
 
-    DEBUG = False
-    DATABASE = {
-        "DB_NAME": os.environ.get("POSTGRES_DB", "task_office"),
-        "DB_USER": os.environ.get("POSTGRES_USER", "task_office_user"),
-        "DB_PASSWORD": os.environ.get("POSTGRES_PASSWORD", "task_office_user"),
-        "DB_HOST": os.environ.get("POSTGRES_HOST", "127.0.0.1"),
-        "DB_PORT": os.environ.get("POSTGRES_PORT", "5432"),
-    }
-    SQLALCHEMY_DATABASE_URI = "postgresql://{username}:{password}@{host}:{db_port}/{db_name}".format(
-        username=DATABASE["DB_USER"],
-        password=DATABASE["DB_PASSWORD"],
-        host=DATABASE["DB_HOST"],
-        db_port=DATABASE["DB_PORT"],
-        db_name=DATABASE["DB_NAME"],
-    )
-
 
 class DevConfig(Config):
     """Development configuration."""
 
-    DEBUG = True
-    # Put the db file in project root
-    DATABASE = {
-        "DB_NAME": os.environ.get("POSTGRES_DB", "task_office_dev"),
-        "DB_USER": os.environ.get("POSTGRES_USER", "task_office_user"),
-        "DB_PASSWORD": os.environ.get("POSTGRES_PASSWORD", "task_office_user"),
-        "DB_HOST": os.environ.get("POSTGRES_HOST", "127.0.0.1"),
-        "DB_PORT": os.environ.get("POSTGRES_PORT", "5432"),
-    }
-    SQLALCHEMY_DATABASE_URI = "postgresql://{username}:{password}@{host}:{db_port}/{db_name}".format(
-        username=DATABASE["DB_USER"],
-        password=DATABASE["DB_PASSWORD"],
-        host=DATABASE["DB_HOST"],
-        db_port=DATABASE["DB_PORT"],
-        db_name=DATABASE["DB_NAME"],
-    )
     CACHE_TYPE = "simple"  # Can be "memcached", "redis", etc.
-
-
-class TestConfig(Config):
-    """Test configuration."""
-
-    TESTING = True
-    DEBUG = True
-    DATABASE = {
-        "DB_NAME": os.environ.get("POSTGRES_DB", "task_office_test"),
-        "DB_USER": os.environ.get("POSTGRES_USER", "task_office_user"),
-        "DB_PASSWORD": os.environ.get("POSTGRES_PASSWORD", "task_office_user"),
-        "DB_HOST": os.environ.get("POSTGRES_HOST", "127.0.0.1"),
-        "DB_PORT": os.environ.get("POSTGRES_PORT", "5432"),
-    }
-    SQLALCHEMY_DATABASE_URI = "postgresql:://{username}:{password}@{host}:{db_port}/{db_name}".format(
-        username=DATABASE["DB_USER"],
-        password=DATABASE["DB_PASSWORD"],
-        host=DATABASE["DB_HOST"],
-        db_port=DATABASE["DB_PORT"],
-        db_name=DATABASE["DB_NAME"],
-    )
 
 
 MODE = os.environ.get("MODE", default="dev")
 
-configurations = {"dev": DevConfig, "prod": ProdConfig, "test": TestConfig}
+configurations = {"dev": DevConfig, "prod": ProdConfig}
 
 CONFIG = configurations.get(MODE)
