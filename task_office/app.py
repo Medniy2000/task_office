@@ -2,9 +2,11 @@
 """The app module, containing the app factory function."""
 from flask import Flask
 
-from task_office import commands, auth
+from task_office import commands, auth, swagger
 from task_office.exceptions import InvalidUsage
 from task_office.extensions import bcrypt, cache, db, migrate, cors, jwt
+from task_office.settings import CONFIG
+from task_office.swagger import SWAGGER_URL
 
 
 def create_app(config_object):
@@ -13,7 +15,11 @@ def create_app(config_object):
 
     :param config_object: The configuration object to use.
     """
-    app = Flask(__name__.split(".")[0])
+    app = Flask(
+        __name__.split(".")[0],
+        static_folder=CONFIG.STATIC_DIR,
+        static_url_path=CONFIG.STATIC_URL,
+    )
     app.url_map.strict_slashes = False
     app.config.from_object(config_object)
     register_extensions(app)
@@ -29,6 +35,7 @@ def register_extensions(app):
     bcrypt.init_app(app)
     cache.init_app(app)
     db.init_app(app)
+    jwt.init_app(app)
     migrate.init_app(app, db)
 
 
@@ -37,7 +44,9 @@ def register_blueprints(app):
     origins = app.config.get("CORS_ORIGIN_WHITELIST", "*")
     cors.init_app(auth.views.blueprint, origins=origins)
     app.register_blueprint(auth.views.blueprint)
-    jwt.init_app(app)
+    if CONFIG.USE_DOCS:
+        app.register_blueprint(swagger.views.blueprint_swagger, url_prefix=SWAGGER_URL)
+        app.register_blueprint(swagger.views.blueprint)
 
 
 def register_errorhandlers(app):

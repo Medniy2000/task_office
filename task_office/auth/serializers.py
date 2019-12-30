@@ -5,6 +5,7 @@ from marshmallow.validate import Length
 from task_office.auth.models import User
 from task_office.core.serializers import BaseSchema, XSchema
 from task_office.core.validators import Unique
+from task_office.swagger import API_SPEC
 
 
 class UserSchema(BaseSchema):
@@ -106,3 +107,11 @@ class SignedSchema(XSchema):
 
 
 signed_schema = SignedSchema()
+
+
+API_SPEC.components.schema("UserSchema", schema=UserSchema)
+API_SPEC.components.schema("UserSignInSchema", schema=UserSignInSchema)
+API_SPEC.components.schema("UserSignUpSchema", schema=UserSignUpSchema)
+API_SPEC.components.schema("TokenSchema", schema=TokenSchema)
+API_SPEC.components.schema("SignedTokensSchema", schema=SignedTokensSchema)
+API_SPEC.components.schema("SignedSchema", schema=SignedSchema)

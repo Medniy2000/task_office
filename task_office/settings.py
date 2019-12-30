@@ -11,33 +11,31 @@ env = Env()
 class Config(object):
     """Base configuration."""
 
+    # Project dirs
     APP_DIR = os.path.abspath(os.path.dirname(__file__))
     PROJECT_ROOT = os.path.abspath(os.path.join(APP_DIR, os.pardir))
 
+    # Environment variables setting
     READ_DOT_ENV_FILE = env.bool("FLASK_READ_DOT_ENV_FILE", default=True)
     if READ_DOT_ENV_FILE:
         # OS environment variables take precedence over variables from .env
         env.read_env(os.path.join(PROJECT_ROOT, ".env"))
 
-    FLASK_DEBUG = env.int("FLASK_DEBUG", 0)
-
     PROJECT_NAME = env.str("PROJECT_NAME", "Task Office")
     SECRET_KEY = env.str("FLASK_SECRET", "secret-key")
-    API_V1_PREFIX = "/api/v1"
 
+    API_V1_PREFIX = "/api/v1"
+    USE_DOCS = env.bool("USE_DOCS", False)
+    FLASK_DEBUG = env.int("FLASK_DEBUG", 0)
     DEBUG_TB_INTERCEPT_REDIRECTS = False
+
+    # Static settings
+    STATIC_DIR = os.path.abspath(os.path.join(PROJECT_ROOT, "static"))
+    STATIC_URL = API_V1_PREFIX + "/static"
+
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    CORS_ORIGIN_WHITELIST = [
-        "http://0.0.0.0:4100",
-        "http://localhost:4100",
-        "http://0.0.0.0:8000",
-        "http://localhost:8000",
-        "http://0.0.0.0:4200",
-        "http://localhost:4200",
-        "http://0.0.0.0:4000",
-        "http://localhost:4000",
-    ]
+    CORS_ORIGIN_WHITELIST = env.list("CORS_ORIGIN_WHITELIST", [])
 
     # JWT
     JWT_AUTH_USERNAME_KEY = "uuid"
