@@ -11,7 +11,7 @@ UNKNOWN_ERROR = template([], code=500)
 class InvalidUsage(Exception):
     status_code = 500
 
-    def __init__(self, messages, status_code=None, payload=None):
+    def __init__(self, messages, status_code=500, payload=None):
         Exception.__init__(self)
         self.messages = template(data=messages, code=status_code)
         if status_code is not None:

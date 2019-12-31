@@ -88,9 +88,6 @@ class TokenSchema(XSchema):
     lifetime = fields.Integer()
 
 
-token_schema = TokenSchema()
-
-
 class SignedTokensSchema(XSchema):
     access = fields.Nested(TokenSchema)
     refresh = fields.Nested(TokenSchema)
@@ -98,7 +95,9 @@ class SignedTokensSchema(XSchema):
     time_zone_info = fields.Str()
 
 
-signed_tokens_schema = SignedTokensSchema()
+class RefreshedAccessTokenSchema(XSchema):
+    access = fields.Nested(TokenSchema)
+    time_zone_info = fields.Str()
 
 
 class SignedSchema(XSchema):
@@ -107,6 +106,9 @@ class SignedSchema(XSchema):
 
 
 signed_schema = SignedSchema()
+signed_tokens_schema = SignedTokensSchema()
+refreshed_access_tokens_schema = RefreshedAccessTokenSchema()
+token_schema = TokenSchema()
 
 
 API_SPEC.components.schema("UserSchema", schema=UserSchema)
@@ -114,4 +116,7 @@ API_SPEC.components.schema("UserSignInSchema", schema=UserSignInSchema)
 API_SPEC.components.schema("UserSignUpSchema", schema=UserSignUpSchema)
 API_SPEC.components.schema("TokenSchema", schema=TokenSchema)
 API_SPEC.components.schema("SignedTokensSchema", schema=SignedTokensSchema)
+API_SPEC.components.schema(
+    "RefreshedAccessTokenSchema", schema=RefreshedAccessTokenSchema
+)
 API_SPEC.components.schema("SignedSchema", schema=SignedSchema)

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """User models."""
-
-from task_office.database import Column, Model, PKMixin, db, DTMixin
+from task_office.core.models.mixins import DTMixin, PKMixin
+from task_office.database import Column, Model, db
 from task_office.extensions import bcrypt
 
 

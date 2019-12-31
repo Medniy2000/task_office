@@ -15,9 +15,7 @@ API_URL = "/api/v1/docs/open-api"
 blueprint = Blueprint("docs", __name__, url_prefix=CONFIG.API_V1_PREFIX + "/docs")
 
 blueprint_swagger = get_swaggerui_blueprint(
-    SWAGGER_URL,
-    API_URL,
-    config={"app_name": CONFIG.PROJECT_NAME},
+    SWAGGER_URL, API_URL, config={"app_name": CONFIG.PROJECT_NAME}
 )
 
 

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """The app module, containing the app factory function."""
 from flask import Flask
+from task_office.auth.jwt_error_handlers import jwt_errors_map
 
 from task_office import commands, auth, swagger
 from task_office.exceptions import InvalidUsage
@@ -24,7 +25,7 @@ def create_app(config_object):
     app.config.from_object(config_object)
     register_extensions(app)
     register_blueprints(app)
-    register_errorhandlers(app)
+    register_error_handlers(app)
     register_shellcontext(app)
     register_commands(app)
     return app
@@ -49,13 +50,24 @@ def register_blueprints(app):
         app.register_blueprint(swagger.views.blueprint)
 
 
-def register_errorhandlers(app):
-    def errorhandler(error):
+def register_error_handlers(app):
+    def error_handler(error):
         response = error.to_json()
         response.status_code = error.status_code
         return response
 
-    app.errorhandler(InvalidUsage)(errorhandler)
+    app.errorhandler(InvalidUsage)(error_handler)
+
+    # register errors(wrapped) for jwt extended custom
+    def jwt_error_handler(error):
+        wrapped_error_handler = jwt_errors_map[str(error.__class__.__name__)]["handler"]
+        unwrapped_error = wrapped_error_handler(error)
+        return error_handler(unwrapped_error)
+
+    [
+        app.errorhandler(payload["error"])(jwt_error_handler)
+        for error_name, payload in jwt_errors_map.items()
+    ]
 
 
 def register_shellcontext(app):
