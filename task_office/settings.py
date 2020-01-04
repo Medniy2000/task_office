@@ -25,6 +25,7 @@ class Config(object):
     SECRET_KEY = env.str("FLASK_SECRET", "secret-key")
 
     API_V1_PREFIX = "/api/v1"
+    API_DATETIME_FORMAT = "%Y-%m-%d %I:%M:%S"
     USE_DOCS = env.bool("USE_DOCS", False)
     FLASK_DEBUG = env.int("FLASK_DEBUG", 0)
     DEBUG_TB_INTERCEPT_REDIRECTS = False

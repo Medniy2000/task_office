@@ -3,6 +3,7 @@ import logging
 from marshmallow import Schema, fields
 
 from task_office.exceptions import InvalidUsage
+from task_office.settings import CONFIG
 
 
 class XSchema(Schema):
@@ -32,8 +33,12 @@ class XSchema(Schema):
 
 
 class BaseSchema(XSchema):
-    created_at = fields.DateTime(attribute="created_at", dump_only=True)
-    updated_at = fields.DateTime(attribute="updated_at", dump_only=True)
+    created_at = fields.DateTime(
+        attribute="created_at", dump_only=True, format=CONFIG.API_DATETIME_FORMAT
+    )
+    updated_at = fields.DateTime(
+        attribute="updated_at", dump_only=True, format=CONFIG.API_DATETIME_FORMAT
+    )
     uuid = fields.UUID(dump_only=True)
 
     class Meta:
