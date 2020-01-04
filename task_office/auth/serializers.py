@@ -1,4 +1,5 @@
 # coding: utf-8
+from flask_babel import lazy_gettext as _
 from marshmallow import fields, post_dump, validates_schema
 from marshmallow.validate import Length
 
@@ -26,7 +27,7 @@ user_schemas = UserSchema(many=True)
 
 
 class UserSignUpSchema(XSchema):
-    error_messages = {"passwords_dismatch": "Passwords do not match"}
+    error_messages = {"passwords_dismatch": _("Passwords do not match")}
 
     password_confirm = fields.Str(
         required=True, load_only=True, validate=[Length(min=6, max=32)]
@@ -56,13 +57,10 @@ user_signup_schema = UserSignUpSchema()
 
 
 class UserSignInSchema(XSchema):
-    error_messages = {"usr_not_found": "User not found"}
+    error_messages = {"usr_not_found": _("User not found")}
 
     password = fields.Str(
-        required=True,
-        load_only=True,
-        validate=[Length(min=6, max=32)],
-        error_messages={"required": "Please provide a name."},
+        required=True, load_only=True, validate=[Length(min=6, max=32)]
     )
     email = fields.Email(required=True, load_only=True, validate=[Length(max=255)])
 

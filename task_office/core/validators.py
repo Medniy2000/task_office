@@ -1,5 +1,5 @@
 import typing
-
+from flask_babel import lazy_gettext as _
 from marshmallow import ValidationError
 from marshmallow.validate import Validator
 
@@ -7,7 +7,7 @@ from marshmallow.validate import Validator
 class Unique(Validator):
     """Validator which is entity exists by some field."""
 
-    already_exists = "Already exists with value {}"
+    already_exists = _("Already exists with value {}")
 
     def __init__(self, model: object, field_name: str):
 

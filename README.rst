@@ -29,6 +29,16 @@ To run the web application use::
 
     flask run --with-threads
 
+
+Translations commands::
+
+    pybabel extract -F babel.cfg -k lazy_gettext -o messages.pot .
+    pybabel init -i messages.pot -d translations -l en
+    pybabel init -i messages.pot -d translations -l uk
+    pybabel init -i messages.pot -d translations -l ru
+    pybabel compile -d translations
+    pybabel update -i messages.pot -d translations
+
 Features
 --------
 

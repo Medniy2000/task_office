@@ -5,7 +5,7 @@ from task_office.auth.jwt_error_handlers import jwt_errors_map
 
 from task_office import commands, auth, swagger
 from task_office.exceptions import InvalidUsage
-from task_office.extensions import bcrypt, cache, db, migrate, cors, jwt
+from task_office.extensions import bcrypt, cache, db, migrate, cors, jwt, babel
 from task_office.settings import CONFIG
 from task_office.swagger import SWAGGER_URL
 
@@ -38,6 +38,7 @@ def register_extensions(app):
     db.init_app(app)
     jwt.init_app(app)
     migrate.init_app(app, db)
+    babel.init_app(app)
 
 
 def register_blueprints(app):

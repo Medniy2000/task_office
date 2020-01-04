@@ -56,7 +56,7 @@ def sign_in(**kwargs):
                 "token": create_refresh_token(identity=data["user"]),
             },
             "header_type": CONFIG.JWT_AUTH_HEADER_PREFIX,
-            "time_zone_info": "utc",
+            "time_zone_info": CONFIG.TIME_ZONE,
         },
     }
 
@@ -72,5 +72,5 @@ def refresh(**kwargs):
             "lifetime": access_lf,
             "token": create_access_token(identity=current_user, fresh=True),
         },
-        "time_zone_info": "utc",
+        "time_zone_info": CONFIG.TIME_ZONE,
     }

@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 """Extensions module. Each extension is initialized in the app factory located in app.py."""
-
+from flask import g, request
+from flask_babel import Babel
 from flask_bcrypt import Bcrypt
 from flask_caching import Cache
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
-
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy, Model
+
+from task_office.settings import CONFIG
+from task_office.utils import jwt_identity, identity_loader
 
 
 class CRUDMixin(Model):
@@ -44,8 +47,29 @@ migrate = Migrate()
 cache = Cache()
 cors = CORS()
 
-from task_office.utils import jwt_identity, identity_loader  # noqa
-
+# JWT
+# ------------------------------------------------------------------------------
 jwt = JWTManager()
 jwt.user_loader_callback_loader(jwt_identity)
 jwt.user_identity_loader(identity_loader)
+
+# Babel
+# https://pythonhosted.org/Flask-Babel/
+# ------------------------------------------------------------------------------
+babel = Babel(default_locale=CONFIG.LOCALE, default_timezone=CONFIG.TIME_ZONE)
+
+
+@babel.localeselector
+def get_locale():
+    # if a user is logged in, use the locale from the user settings
+    user = getattr(g, "user", None)
+    if user is not None:
+        return user.locale
+    return request.accept_languages.best_match(list(CONFIG.LANGUAGES.keys()))
+
+
+@babel.timezoneselector
+def get_timezone():
+    user = getattr(g, "user", None)
+    if user is not None:
+        return user.timezone

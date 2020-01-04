@@ -30,6 +30,13 @@ class Config(object):
     FLASK_DEBUG = env.int("FLASK_DEBUG", 0)
     DEBUG_TB_INTERCEPT_REDIRECTS = False
 
+    TIME_ZONE = "UTC"
+    LANGUAGES = {"ru": "Russian", "en": "English", "uk": "Ukrainian"}
+    LOCALE = "en"
+
+    # https://pythonhosted.org/Flask-Babel/
+    BABEL_TRANSLATION_DIRECTORIES = os.path.join(PROJECT_ROOT, "translations")
+
     # Static settings
     STATIC_DIR = os.path.abspath(os.path.join(PROJECT_ROOT, "static"))
     STATIC_URL = API_V1_PREFIX + "/static"

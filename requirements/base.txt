@@ -14,3 +14,4 @@ uuid
 environs
 unicode_slugify
 Click==7.0
+Flask-Babel>=0.12.2

@@ -1,3 +1,4 @@
+from flask_babel import lazy_gettext as _
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended.exceptions import (
     NoAuthorizationError,
@@ -40,11 +41,11 @@ def handle_wrong_token_error(e):
 
 
 def handle_revoked_token_error(e):
-    return InvalidUsage(messages=["Token has been revoked"], status_code=401)
+    return InvalidUsage(messages=[_("Token has been revoked")], status_code=401)
 
 
 def handle_fresh_token_required(e):
-    return InvalidUsage(messages=["Fresh token required"], status_code=401)
+    return InvalidUsage(messages=[_("Fresh token required")], status_code=401)
 
 
 def handler_user_load_error(e):
@@ -53,12 +54,14 @@ def handler_user_load_error(e):
     # can safely call get_jwt_identity() here
     identity = get_jwt_identity()
     return InvalidUsage(
-        messages=["Error loading the user {}".format(identity)], status_code=401
+        messages=[_("Error loading the user {}").format(identity)], status_code=401
     )
 
 
 def handle_failed_user_claims_verification(e):
-    return InvalidUsage(messages=["User claims verification failed"], status_code=400)
+    return InvalidUsage(
+        messages=[_("User claims verification failed")], status_code=400
+    )
 
 
 jwt_errors_map = {
