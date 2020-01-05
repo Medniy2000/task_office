@@ -17,7 +17,9 @@ class PKMixin(object):
     __table_args__ = {"extend_existing": True}
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    uuid = db.Column(UUID, primary_key=True, default=uuid.uuid4().__str__())
+    uuid = db.Column(
+        UUID, primary_key=True, unique=True, default=lambda: uuid.uuid4().__str__()
+    )
     meta = db.Column(JSON, default=dict)
 
     @classmethod

@@ -29,3 +29,29 @@ class Unique(Validator):
             message = self.already_exists
             raise ValidationError(self._format_error(value, message))
         return value
+
+
+class PK_Exists(Validator):
+    """Validator of entity pk."""
+
+    not_found = _("Not found with value {}")
+
+    def __init__(self, model: object, field_name: str = "uuid"):
+
+        self.model = model
+        self.field_name = field_name
+
+    def _repr_args(self) -> str:
+        return "model={!r}, field_name={!r}".format(self.model, self.field_name)
+
+    def _format_error(self, value, message: str) -> str:
+        return message.format(value)
+
+    def __call__(self, value) -> typing.Any:
+        param = {self.field_name: str(value)}
+        obj = self.model.query.filter_by(**param).first()
+
+        if not obj:
+            message = self.not_found
+            raise ValidationError(self._format_error(value, message))
+        return value

@@ -13,3 +13,4 @@ API_SPEC = APISpec(
 )
 
 # TODO(Medniy) wait for a DocumentedBlueprint and make urls generation
+# https://github.com/marshmallow-code/apispec-webframeworks/pull/27
