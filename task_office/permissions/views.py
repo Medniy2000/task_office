@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Boards views."""
+"""Permissions views."""
 
 from flask import Blueprint
 from flask_apispec import use_kwargs, marshal_with
@@ -12,6 +12,17 @@ from ..settings import CONFIG
 blueprint = Blueprint(
     "permissions", __name__, url_prefix=CONFIG.API_V1_PREFIX + "/permissions"
 )
+
+
+@blueprint.route("/meta", methods=("get",))
+@jwt_required
+def get_meta_data():
+    """
+    Additional data for Permissions
+    """
+    data = dict()
+    data["roles"] = Permission.Role.dict_choices()
+    return data
 
 
 @blueprint.route("/", methods=("post",))

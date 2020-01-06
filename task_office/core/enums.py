@@ -15,10 +15,17 @@ class XEnum(Enum):
         return [(tag.name, tag.value) for tag in cls]
 
     @classmethod
+    def dict_choices(cls):
+        return [
+            {"name": tag.name, "value": tag.value, "description": tag.description}
+            for tag in cls
+        ]
+
+    @classmethod
     def get_names(cls):
         return [item.name for item in cls]
 
-    def __new__(cls, value, name, description):
+    def __new__(cls, value, name, description=""):
         member = object.__new__(cls)
         member._value_ = value
         member.fullname = name
