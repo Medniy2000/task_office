@@ -7,6 +7,7 @@ from .extensions import db
 
 # Alias common SQLAlchemy names
 Column = db.Column
+Enum = db.Enum
 relationship = relationship
 Model = db.Model
 
