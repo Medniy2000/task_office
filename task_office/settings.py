@@ -54,6 +54,9 @@ class Config(object):
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=env.int("JWT_REFRESH_TOKEN_EXPIRES", 7))
     JWT_BLACKLIST_TOKEN_CHECKS = ["access", "refresh"]
 
+    DEFAULT_OFFSET_VALUE = 0
+    MAX_LIMIT_VALUE = 50
+
     # DB
     DATABASE = {
         "DB_NAME": env.str("POSTGRES_DB", "task_office"),

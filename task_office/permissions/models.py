@@ -34,4 +34,4 @@ class Permission(PKMixin, DTMixin, Model):
 
     def __repr__(self):
         """Represent instance as a unique string."""
-        return "<Permission({uuid!r})>".format(name=self.uuid)
+        return "<Permission({})>".format(self.uuid)

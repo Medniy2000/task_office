@@ -6,7 +6,13 @@ from flask_apispec import use_kwargs, marshal_with
 from flask_jwt_extended import jwt_required
 
 from .models import Permission
-from .serializers import permission_in_schema, permission_out_schema
+from .schemas.basic_schemas import (
+    permission_in_schema,
+    permission_out_schema,
+    permissions_in_list_schema,
+    permission_list_out_schema,
+)
+from ..core.helpers.listed_response import listed_response
 from ..settings import CONFIG
 
 blueprint = Blueprint(
@@ -25,7 +31,7 @@ def get_meta_data():
     return data
 
 
-@blueprint.route("/", methods=("post",))
+@blueprint.route("", methods=("post",))
 @jwt_required
 @use_kwargs(permission_in_schema)
 @marshal_with(permission_out_schema)
@@ -34,3 +40,15 @@ def create_permission(**kwargs):
     permission = Permission(**data)
     permission.save()
     return permission
+
+
+@blueprint.route("", methods=("get",))
+@jwt_required
+@use_kwargs(permissions_in_list_schema)
+def get_list_permission(**kwargs):
+    data = kwargs
+    query = Permission.query
+    data = listed_response.serialize(
+        query=query, query_params=data, schema=permission_list_out_schema
+    )
+    return data

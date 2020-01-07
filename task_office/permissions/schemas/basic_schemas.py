@@ -5,7 +5,8 @@ from marshmallow_enum import EnumField
 
 from task_office.auth import User
 from task_office.boards import Board
-from task_office.core.serializers import BaseSchema
+from task_office.core.enums import XEnum, OrderingDirection
+from task_office.core.serializers import BaseSchema, ListInSchema, XSchema
 from task_office.core.validators import PK_Exists
 from task_office.exceptions import InvalidUsage
 from task_office.permissions.models import Permission
@@ -47,7 +48,34 @@ class PermissionOutSchema(BaseSchema):
 
 permission_in_schema = PermissionInSchema()
 permission_out_schema = PermissionOutSchema()
-
-
+permission_list_out_schema = PermissionOutSchema(many=True)
 API_SPEC.components.schema("PermissionInSchema", schema=PermissionInSchema)
 API_SPEC.components.schema("PermissionOutSchema", schema=PermissionOutSchema)
+
+
+class PermissionInListSchema(ListInSchema):
+    class OrderingMap(XEnum):
+        CREATED_AT_ASC = (
+            "-created_at",
+            Permission.created_at.asc(),
+            OrderingDirection.ASC,
+        )
+        CREATED_AET_DESC = (
+            "created_at",
+            Permission.created_at.desc(),
+            OrderingDirection.DESC,
+        )
+
+    # board_uuid = fields.UUID(
+    #     required=True, validate=[PK_Exists(Board, "uuid")], allow_none=False
+    # )
+
+    searching = fields.Nested(XSchema, required=False)
+    ordering = EnumField(OrderingMap, required=False, by_value=True)
+
+    class Meta:
+        strict = True
+
+
+permissions_in_list_schema = PermissionInListSchema()
+API_SPEC.components.schema("PermissionInListSchema", schema=PermissionInListSchema)

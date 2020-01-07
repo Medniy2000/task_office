@@ -37,3 +37,8 @@ class XEnum(Enum):
 
     def __str__(self):
         return self.value
+
+
+class OrderingDirection(XEnum):
+    ASC = "asc", _("Ascend")
+    DESC = "desc", _("Descend")

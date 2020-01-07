@@ -1,6 +1,7 @@
 import logging
 
-from marshmallow import Schema, fields
+from flask_babel import lazy_gettext as _
+from marshmallow import Schema, fields, validates_schema
 
 from task_office.exceptions import InvalidUsage
 from task_office.settings import CONFIG
@@ -43,3 +44,21 @@ class BaseSchema(XSchema):
 
     class Meta:
         strict = True
+
+
+class ListInSchema(XSchema):
+    error_messages = {
+        "max_limit_exceeded": _("Max limit {} exceeded").format(CONFIG.MAX_LIMIT_VALUE)
+    }
+
+    limit = fields.Integer(default=CONFIG.DEFAULT_OFFSET_VALUE, required=True)
+    offset = fields.Integer(default=0, required=True)
+
+    @validates_schema
+    def validate_schema(self, data, **kwargs):
+        limit = data["limit"]
+        if limit > CONFIG.MAX_LIMIT_VALUE:
+            self.throw_error(value="", key_error="max_limit_exceeded", code=400)
+
+
+list_in_schema = ListInSchema()
