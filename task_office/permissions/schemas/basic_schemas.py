@@ -6,7 +6,7 @@ from marshmallow_enum import EnumField
 from task_office.auth import User
 from task_office.boards import Board
 from task_office.core.enums import XEnum, OrderingDirection
-from task_office.core.serializers import BaseSchema, ListInSchema, XSchema
+from task_office.core.schemas import BaseSchema, ListInSchema, XSchema
 from task_office.core.validators import PK_Exists
 from task_office.exceptions import InvalidUsage
 from task_office.permissions.models import Permission
@@ -66,9 +66,9 @@ class PermissionInListSchema(ListInSchema):
             OrderingDirection.DESC,
         )
 
-    # board_uuid = fields.UUID(
-    #     required=True, validate=[PK_Exists(Board, "uuid")], allow_none=False
-    # )
+    board_uuid = fields.UUID(
+        required=True, validate=[PK_Exists(Board, "uuid")], allow_none=False
+    )
 
     searching = fields.Nested(XSchema, required=False)
     ordering = EnumField(OrderingMap, required=False, by_value=True)

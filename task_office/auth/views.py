@@ -12,7 +12,7 @@ from flask_jwt_extended import (
 )
 
 from .models import User
-from .serializers import (
+from .schemas import (
     user_schema,
     user_signup_schema,
     user_signin_schema,

@@ -1,7 +1,8 @@
 import logging
+import uuid
 
 from flask_babel import lazy_gettext as _
-from marshmallow import Schema, fields, validates_schema
+from marshmallow import Schema, fields, validates_schema, post_dump
 
 from task_office.exceptions import InvalidUsage
 from task_office.settings import CONFIG
@@ -42,8 +43,10 @@ class BaseSchema(XSchema):
     )
     uuid = fields.UUID(dump_only=True)
 
-    class Meta:
-        strict = True
+    @post_dump
+    def dump_data(self, data, **kwargs):
+        data["uuid"] = uuid.UUID(data.pop("uuid")).hex
+        return data
 
 
 class ListInSchema(XSchema):
@@ -51,8 +54,8 @@ class ListInSchema(XSchema):
         "max_limit_exceeded": _("Max limit {} exceeded").format(CONFIG.MAX_LIMIT_VALUE)
     }
 
-    limit = fields.Integer(default=CONFIG.DEFAULT_OFFSET_VALUE, required=True)
-    offset = fields.Integer(default=0, required=True)
+    limit = fields.Integer(default=CONFIG.DEFAULT_LIMIT_VALUE, required=True)
+    offset = fields.Integer(default=CONFIG.DEFAULT_OFFSET_VALUE, required=True)
 
     @validates_schema
     def validate_schema(self, data, **kwargs):

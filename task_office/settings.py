@@ -55,6 +55,7 @@ class Config(object):
     JWT_BLACKLIST_TOKEN_CHECKS = ["access", "refresh"]
 
     DEFAULT_OFFSET_VALUE = 0
+    DEFAULT_LIMIT_VALUE = 15
     MAX_LIMIT_VALUE = 50
 
     # DB

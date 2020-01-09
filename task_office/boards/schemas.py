@@ -3,7 +3,7 @@ from marshmallow import fields, validates_schema
 from marshmallow.validate import Length
 
 from task_office.auth import User
-from task_office.core.serializers import BaseSchema
+from task_office.core.schemas import BaseSchema
 from task_office.core.validators import PK_Exists
 from task_office.swagger import API_SPEC
 

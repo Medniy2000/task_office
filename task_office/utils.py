@@ -2,7 +2,7 @@
 """Helper utilities and decorators."""
 
 
-def jwt_identity(payload):
+def jwt_identity(identifier):
     from task_office.auth import User
 
     return User.get_by_id(payload)
