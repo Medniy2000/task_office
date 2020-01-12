@@ -1,4 +1,6 @@
 # coding: utf-8
+import uuid
+
 from flask_babel import lazy_gettext as _
 from marshmallow import fields, post_dump, validates_schema
 from marshmallow.validate import Length
@@ -14,9 +16,19 @@ class UserSchema(BaseSchema):
     email = fields.Email(dump_only=True)
     bio = fields.Str(dump_only=True)
 
+    class Meta:
+        strict = True
+
+
+class UserSchemaNested(XSchema):
+    uuid = fields.UUID(dump_only=True)
+    username = fields.Str(dump_only=True)
+    email = fields.Email(dump_only=True)
+
     @post_dump
-    def dump_user(self, data, **kwargs):
-        return {"user": data}
+    def dump_data(self, data, **kwargs):
+        data["uuid"] = uuid.UUID(data.pop("uuid")).hex
+        return data
 
     class Meta:
         strict = True
@@ -24,6 +36,7 @@ class UserSchema(BaseSchema):
 
 user_schema = UserSchema()
 user_schemas = UserSchema(many=True)
+user_schema_nested = UserSchemaNested()
 
 
 class UserSignUpSchema(XSchema):
@@ -110,6 +123,7 @@ token_schema = TokenSchema()
 
 
 API_SPEC.components.schema("UserSchema", schema=UserSchema)
+API_SPEC.components.schema("UserSchemaNested", schema=UserSchemaNested)
 API_SPEC.components.schema("UserSignInSchema", schema=UserSignInSchema)
 API_SPEC.components.schema("UserSignUpSchema", schema=UserSignUpSchema)
 API_SPEC.components.schema("TokenSchema", schema=TokenSchema)
