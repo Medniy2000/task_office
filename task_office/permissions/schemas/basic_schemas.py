@@ -50,7 +50,7 @@ API_SPEC.components.schema("PermissionInSchema", schema=PermissionInSchema)
 API_SPEC.components.schema("PermissionOutSchema", schema=PermissionOutSchema)
 
 
-class PermissionInListSchema(ListInSchema):
+class PermissionListInSchema(ListInSchema):
     class OrderingMap(XEnum):
         CREATED_AT_ASC = (
             "-created_at",
@@ -70,5 +70,5 @@ class PermissionInListSchema(ListInSchema):
         strict = True
 
 
-permissions_in_list_schema = PermissionInListSchema()
-API_SPEC.components.schema("PermissionInListSchema", schema=PermissionInListSchema)
+permissions_in_list_schema = PermissionListInSchema()
+API_SPEC.components.schema("PermissionListInSchema", schema=PermissionListInSchema)

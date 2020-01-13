@@ -6,7 +6,7 @@ from flask_apispec import use_kwargs, marshal_with
 from flask_jwt_extended import jwt_required, get_current_user
 
 from .constants import BOARDS_PREFIX
-from .schemas import (
+from .schemas.basic_schemas import (
     board_in_schema,
     boards_in_list_schema,
     boards_list_out_schema,

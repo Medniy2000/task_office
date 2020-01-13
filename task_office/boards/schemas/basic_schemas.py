@@ -48,7 +48,7 @@ API_SPEC.components.schema("BoardInSchema", schema=BoardInSchema)
 API_SPEC.components.schema("BoardOutSchema", schema=BoardOutSchema)
 
 
-class BoardInListSchema(ListInSchema):
+class BoardListInSchema(ListInSchema):
     class OrderingMap(XEnum):
         pass
 
@@ -59,6 +59,5 @@ class BoardInListSchema(ListInSchema):
         strict = True
 
 
-boards_in_list_schema = BoardInListSchema()
-API_SPEC.components.schema("BoardInListSchema", schema=BoardInListSchema)
-
+boards_in_list_schema = BoardListInSchema()
+API_SPEC.components.schema("BoardInListSchema", schema=BoardListInSchema)

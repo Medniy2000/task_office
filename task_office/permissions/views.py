@@ -54,6 +54,13 @@ def create_permission(board_uuid, **kwargs):
     # Check board_uuid, user_uuid are unique for permission
     empty_query_required(Permission, board_uuid=board_uuid, user_uuid=data["user_uuid"])
 
+    role = data["role"]
+    if role == Permission.Role.OWNER.value:
+        if Permission.query.filter_by(
+            board_uuid=board_uuid, role=Permission.Role.OWNER.value
+        ).first():
+            raise InvalidUsage(messages=[_("Not allowed")], status_code=422)
+
     permission = Permission(board_uuid=board_uuid, **data)
     permission.save()
     return permission
@@ -69,10 +76,16 @@ def update_permission(board_uuid, permission_uuid, **kwargs):
     if not is_uuid(board_uuid) or not is_uuid(permission_uuid):
         raise InvalidUsage(messages=[_("Not found")], status_code=404)
 
+    role = data["role"]
+    if role == Permission.Role.OWNER.value:
+        if Permission.query.filter_by(
+            board_uuid=board_uuid, role=Permission.Role.OWNER.value
+        ).first():
+            raise InvalidUsage(messages=[_("Not allowed")], status_code=422)
+
     permission = non_empty_query_required(
         Permission, uuid=str(permission_uuid), board_uuid=str(board_uuid)
-    )
-    permission = permission.first()
+    )[1]
 
     permission.update(updated_at=datetime.utcnow(), **data)
     permission.save()
