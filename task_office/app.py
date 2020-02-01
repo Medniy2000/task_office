@@ -3,7 +3,7 @@
 from flask import Flask
 from task_office.auth.jwt_error_handlers import jwt_errors_map
 
-from task_office import commands, auth, swagger, boards, permissions
+from task_office import commands, auth, swagger, boards, permissions, columns
 from task_office.exceptions import InvalidUsage
 from task_office.extensions import bcrypt, cache, db, migrate, cors, jwt, babel
 from task_office.settings import CONFIG
@@ -48,6 +48,7 @@ def register_blueprints(app):
     app.register_blueprint(auth.views.blueprint)
     app.register_blueprint(boards.views.blueprint)
     app.register_blueprint(permissions.views.blueprint)
+    app.register_blueprint(columns.views.blueprint)
     if CONFIG.USE_DOCS:
         app.register_blueprint(swagger.views.blueprint_swagger, url_prefix=SWAGGER_URL)
         app.register_blueprint(swagger.views.blueprint)

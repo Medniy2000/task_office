@@ -14,9 +14,8 @@ from .schemas.basic_schemas import (
 )
 from ..core.helpers.listed_response import listed_response
 from ..core.models.db_models import Board, Permission
-from ..core.utils import is_uuid
+from ..core.utils import is_uuid, empty_query_required, non_empty_query_required
 from ..exceptions import InvalidUsage
-from ..utils import empty_query_required, non_empty_query_required
 
 blueprint = Blueprint("boards", __name__, url_prefix=BOARDS_PREFIX)
 

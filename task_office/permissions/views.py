@@ -16,9 +16,8 @@ from .schemas.basic_schemas import (
 )
 from ..core.helpers.listed_response import listed_response
 from ..core.models.db_models import Permission, Board
-from ..core.utils import is_uuid
+from ..core.utils import is_uuid, non_empty_query_required, empty_query_required
 from ..exceptions import InvalidUsage
-from ..utils import non_empty_query_required, empty_query_required
 
 blueprint = Blueprint(
     "permissions", __name__, url_prefix=BOARD_RETRIEVE_URL + "/permissions"
