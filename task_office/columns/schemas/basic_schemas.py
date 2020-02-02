@@ -11,9 +11,19 @@ from task_office.core.schemas import BaseSchema, ListInSchema, XSchema
 from task_office.swagger import API_SPEC
 
 
-class ColumnInSchema(BaseSchema):
+class ColumnPostSchema(BaseSchema):
     name = fields.Str(required=True, allow_none=False, validate=[Length(max=120)])
-    position = fields.Integer(required=False, default=0, validate=[Range(min=0)])
+    position = fields.Integer(
+        required=True, default=1, allow_none=False, validate=[Range(min=1)]
+    )
+
+    class Meta:
+        strict = True
+
+
+class ColumnPutSchema(BaseSchema):
+    name = fields.Str(required=False, allow_none=False, validate=[Length(max=120)])
+    position = fields.Integer(required=False, allow_none=False, validate=[Range(min=1)])
 
     class Meta:
         strict = True
@@ -34,10 +44,12 @@ class ColumnOutSchema(BaseSchema):
         strict = True
 
 
-column_in_schema = ColumnInSchema()
+column_post_schema = ColumnPostSchema()
+column_put_schema = ColumnPutSchema()
 column_out_schema = ColumnOutSchema()
 columns_list_out_schema = ColumnOutSchema(many=True)
-API_SPEC.components.schema("ColumnInSchema", schema=ColumnInSchema)
+API_SPEC.components.schema("ColumnPostSchema", schema=ColumnPostSchema)
+API_SPEC.components.schema("ColumnPutSchema", schema=ColumnPutSchema)
 API_SPEC.components.schema("ColumnOutSchema", schema=ColumnOutSchema)
 
 

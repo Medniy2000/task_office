@@ -7,12 +7,12 @@ from task_office.database import Model
 from task_office.exceptions import InvalidUsage
 
 
-def query(model, **params):
+def _query(model, **params):
     return model.query.filter_by(**params)
 
 
 def non_empty_query_required(model, **params):
-    qs = query(model, **params)
+    qs = _query(model, **params)
     obj_first = qs.first()
     if not obj_first:
         raise InvalidUsage(messages=[_("Not found")], status_code=404)
@@ -20,7 +20,7 @@ def non_empty_query_required(model, **params):
 
 
 def empty_query_required(model, **params):
-    qs = query(model, **params)
+    qs = _query(model, **params)
     obj_first = qs.first()
     if obj_first:
         raise InvalidUsage(messages=[_("Already exists")], status_code=422)

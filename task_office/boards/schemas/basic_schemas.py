@@ -9,14 +9,14 @@ from task_office.auth import User
 from task_office.auth.schemas import UserSchemaNested
 from task_office.core.enums import XEnum
 from task_office.core.schemas import BaseSchema, ListInSchema, XSchema
-from task_office.core.validators import PK_Exists
+from task_office.core.validators import PKExists
 from task_office.swagger import API_SPEC
 
 
 class BoardInSchema(BaseSchema):
     name = fields.Str(required=True, allow_none=False, validate=[Length(max=255)])
     description = fields.Str(allow_none=True, required=False, default="")
-    owner_uuid = fields.UUID(required=True, validate=[PK_Exists(User, "uuid")])
+    owner_uuid = fields.UUID(required=True, validate=[PKExists(User, "uuid")])
     is_active = fields.Boolean(default=True)
 
     class Meta:

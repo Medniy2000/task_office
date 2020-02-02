@@ -9,14 +9,14 @@ from task_office.auth.schemas import UserSchemaNested
 from task_office.core.enums import XEnum, OrderingDirection
 from task_office.core.models.db_models import Permission
 from task_office.core.schemas import BaseSchema, ListInSchema, XSchema
-from task_office.core.validators import PK_Exists
+from task_office.core.validators import PKExists
 from task_office.swagger import API_SPEC
 
 
 class PermissionInSchema(BaseSchema):
     role = EnumField(Permission.Role, required=True, by_value=True)
     user_uuid = fields.UUID(
-        required=True, validate=[PK_Exists(User, "uuid")], allow_none=False
+        required=True, validate=[PKExists(User, "uuid")], allow_none=False
     )
 
     class Meta:

@@ -31,7 +31,7 @@ class Unique(Validator):
         return value
 
 
-class PK_Exists(Validator):
+class PKExists(Validator):
     """Validator of entity pk."""
 
     not_found = _("Not found with value {}")

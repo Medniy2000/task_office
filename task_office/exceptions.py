@@ -11,12 +11,15 @@ UNKNOWN_ERROR = template([], code=500)
 class InvalidUsage(Exception):
     status_code = 500
 
-    def __init__(self, messages, status_code=500, payload=None):
+    def __init__(self, messages, status_code=500, key=None):
         Exception.__init__(self)
-        self.messages = template(data=messages, code=status_code)
+        self.key = key
+        payload = messages
+        if self.key:
+            payload = {self.key: messages}
+        self.messages = template(data=payload, code=status_code)
         if status_code is not None:
             self.status_code = status_code
-        self.payload = payload
 
     def to_json(self):
         rv = self.messages
