@@ -100,7 +100,6 @@ class Task(PKMixin, DTMixin, Model):
         DONE = 4, _("Done"), _("Done")
 
     expire_at = db.Column(db.DateTime, nullable=True, default=None)
-
     label = Column(db.String(80), default="")
     name = Column(db.String(120), nullable=False)
     description = Column(db.String(120), nullable=False)
