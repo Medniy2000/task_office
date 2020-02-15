@@ -9,10 +9,10 @@ from flask_jwt_extended import jwt_required
 
 from task_office.boards.constants import BOARD_RETRIEVE_URL
 from .schemas.basic_schemas import (
-    permission_in_schema,
-    permission_out_schema,
-    permissions_in_list_schema,
-    permission_list_out_schema,
+    permission_query_schema,
+    permission_dump_schema,
+    permissions_list_query_schema,
+    permission_list_dump_schema,
 )
 from ..core.helpers.listed_response import listed_response
 from ..core.models.db_models import Permission, Board
@@ -41,9 +41,14 @@ def get_meta_data(board_uuid):
 
 @blueprint.route("", methods=("post",))
 @jwt_required
-@use_kwargs(permission_in_schema)
-@marshal_with(permission_out_schema)
+@use_kwargs(permission_query_schema)
+@marshal_with(permission_dump_schema)
 def create_permission(board_uuid, **kwargs):
+    """
+    :param board_uuid:
+    :param kwargs:
+    :return:
+    """
     data = kwargs
     # Check board_uuid in request_url
     if not is_uuid(board_uuid):
@@ -67,9 +72,15 @@ def create_permission(board_uuid, **kwargs):
 
 @blueprint.route("/<permission_uuid>", methods=("put",))
 @jwt_required
-@use_kwargs(permission_in_schema)
-@marshal_with(permission_out_schema)
+@use_kwargs(permission_query_schema)
+@marshal_with(permission_dump_schema)
 def update_permission(board_uuid, permission_uuid, **kwargs):
+    """
+    :param board_uuid:
+    :param permission_uuid:
+    :param kwargs:
+    :return:
+    """
     data = kwargs
     # Check is valid board uuid and permission_uuid in request url
     if not is_uuid(board_uuid) or not is_uuid(permission_uuid):
@@ -93,8 +104,13 @@ def update_permission(board_uuid, permission_uuid, **kwargs):
 
 @blueprint.route("", methods=("get",))
 @jwt_required
-@use_kwargs(permissions_in_list_schema)
+@use_kwargs(permissions_list_query_schema)
 def get_list_permission(board_uuid, **kwargs):
+    """
+    :param board_uuid:
+    :param kwargs:
+    :return:
+    """
     data = kwargs
     # Check board_uuid in request_url
     if not is_uuid(board_uuid):
@@ -104,15 +120,20 @@ def get_list_permission(board_uuid, **kwargs):
 
     # Serialize to paginated response
     data = listed_response.serialize(
-        query=permissions, query_params=data, schema=permission_list_out_schema
+        query=permissions, query_params=data, schema=permission_list_dump_schema
     )
     return data
 
 
 @blueprint.route("/<permission_uuid>", methods=("get",))
 @jwt_required
-@marshal_with(permission_out_schema)
+@marshal_with(permission_dump_schema)
 def get_permission_by_uuid(board_uuid, permission_uuid):
+    """
+    :param board_uuid:
+    :param permission_uuid:
+    :return:
+    """
     # Check is valid board uuid and permission_uuid in request url
     if not is_uuid(board_uuid) or not is_uuid(permission_uuid):
         raise InvalidUsage(messages=[_("Not found")], status_code=404)

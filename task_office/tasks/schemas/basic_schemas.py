@@ -1,14 +1,14 @@
 # coding: utf-8
 import uuid
 
-from marshmallow import fields, post_dump, pre_load, validates_schema
+from marshmallow import fields, post_dump, validates_schema
 from marshmallow.validate import Length, Range
 from marshmallow_enum import EnumField
 
-from task_office.auth.schemas import UserSchemaNested
 from task_office.core.enums import XEnum, OrderingDirection
 from task_office.core.models.db_models import BoardColumn, Task
-from task_office.core.schemas import BaseSchema, ListInSchema, XSchema
+from task_office.core.schemas.base_schemas import BaseSchema, ListSchema, XSchema
+from task_office.core.schemas.nested_schemas import NestedUserDumpSchema
 from task_office.core.validators import PKExists
 from task_office.settings import CONFIG
 from task_office.swagger import API_SPEC
@@ -74,7 +74,7 @@ class TaskPutSchema(BaseSchema):
             data["state"] = state.value
 
 
-class TaskOutSchema(BaseSchema):
+class TaskDumpSchema(BaseSchema):
     expire_at = fields.DateTime(
         attribute="expire_at", dump_only=True, format=CONFIG.API_DATETIME_FORMAT
     )
@@ -84,7 +84,7 @@ class TaskOutSchema(BaseSchema):
     state = fields.Integer(dump_only=True)
     position = fields.Integer(dump_only=True)
     column_uuid = fields.UUID(dump_only=True)
-    performers = UserSchemaNested(many=True)
+    performers = NestedUserDumpSchema(many=True)
 
     @post_dump
     def dump_data(self, data, **kwargs):
@@ -98,14 +98,14 @@ class TaskOutSchema(BaseSchema):
 
 task_post_schema = TaskPostSchema()
 task_put_schema = TaskPutSchema()
-task_out_schema = TaskOutSchema()
-tasks_list_out_schema = TaskOutSchema(many=True)
+task_dump_schema = TaskDumpSchema()
+tasks_listed_dump_schema = TaskDumpSchema(many=True)
 API_SPEC.components.schema("TaskPostSchema", schema=TaskPostSchema)
 API_SPEC.components.schema("TaskPutSchema", schema=TaskPutSchema)
-API_SPEC.components.schema("TaskOutSchema", schema=TaskOutSchema)
+API_SPEC.components.schema("TaskDumpSchema", schema=TaskDumpSchema)
 
 
-class TasksListInSchema(ListInSchema):
+class TaskListQuerySchema(ListSchema):
     class OrderingMap(XEnum):
         CREATED_AT_ASC = (
             "-created_at",
@@ -125,5 +125,5 @@ class TasksListInSchema(ListInSchema):
         strict = True
 
 
-tasks_in_list_schema = TasksListInSchema()
-API_SPEC.components.schema("TasksListInSchema", schema=TasksListInSchema)
+task_list_query_schema = TaskListQuerySchema()
+API_SPEC.components.schema("TaskListQuerySchema", schema=TaskListQuerySchema)

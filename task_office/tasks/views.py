@@ -10,10 +10,10 @@ from sqlalchemy import func
 
 from .constants import TASKS_PREFIX
 from .schemas.basic_schemas import (
-    tasks_in_list_schema,
-    tasks_list_out_schema,
+    task_list_query_schema,
+    tasks_listed_dump_schema,
     task_post_schema,
-    task_out_schema,
+    task_dump_schema,
     task_put_schema,
 )
 from .utils import reset_tasks_ordering
@@ -40,7 +40,7 @@ def get_meta_data(board_uuid):
 @blueprint.route("", methods=("post",))
 @jwt_required
 @use_kwargs(task_post_schema)
-@marshal_with(task_out_schema)
+@marshal_with(task_dump_schema)
 def create_task(board_uuid, **kwargs):
     """
     :param board_uuid:
@@ -96,7 +96,7 @@ def create_task(board_uuid, **kwargs):
 @blueprint.route("/<task_uuid>", methods=("put",))
 @jwt_required
 @use_kwargs(task_put_schema)
-@marshal_with(task_out_schema)
+@marshal_with(task_dump_schema)
 def update_task(board_uuid, task_uuid, **kwargs):
     """
     :param board_uuid:
@@ -154,7 +154,7 @@ def update_task(board_uuid, task_uuid, **kwargs):
 
 @blueprint.route("", methods=("get",))
 @jwt_required
-@use_kwargs(tasks_in_list_schema)
+@use_kwargs(task_list_query_schema)
 def get_list_tasks(board_uuid, **kwargs):
     """
     :param board_uuid:
@@ -174,6 +174,6 @@ def get_list_tasks(board_uuid, **kwargs):
 
     # Serialize to paginated response
     data = listed_response.serialize(
-        query=tasks, query_params=data, schema=tasks_list_out_schema
+        query=tasks, query_params=data, schema=tasks_listed_dump_schema
     )
     return data

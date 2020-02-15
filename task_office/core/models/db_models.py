@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Boards models."""
 from flask_babel import lazy_gettext as _
 from sqlalchemy.dialects.postgresql import UUID

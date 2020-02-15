@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Swagger views."""
 
 from flask import Blueprint, jsonify
@@ -21,4 +20,8 @@ blueprint_swagger = get_swaggerui_blueprint(
 
 @blueprint.route("/open-api", methods=("get",))
 def api_swagger(**kwargs):
+    """
+    :param kwargs:
+    :return:
+    """
     return jsonify(API_SPEC.to_dict())

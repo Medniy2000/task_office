@@ -1,3 +1,4 @@
+"""Columns utils."""
 from task_office.core.models.db_models import BoardColumn
 from task_office.database import Model
 from task_office.extensions import db

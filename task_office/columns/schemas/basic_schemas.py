@@ -7,7 +7,7 @@ from marshmallow_enum import EnumField
 
 from task_office.core.enums import XEnum, OrderingDirection
 from task_office.core.models.db_models import BoardColumn
-from task_office.core.schemas import BaseSchema, ListInSchema, XSchema
+from task_office.core.schemas.base_schemas import BaseSchema, ListSchema, XSchema
 from task_office.swagger import API_SPEC
 
 
@@ -29,7 +29,7 @@ class ColumnPutSchema(BaseSchema):
         strict = True
 
 
-class ColumnOutSchema(BaseSchema):
+class ColumnDumpSchema(BaseSchema):
     name = fields.Str(dump_only=True)
     position = fields.Integer(dump_only=True)
     board_uuid = fields.UUID(dump_only=True)
@@ -46,14 +46,14 @@ class ColumnOutSchema(BaseSchema):
 
 column_post_schema = ColumnPostSchema()
 column_put_schema = ColumnPutSchema()
-column_out_schema = ColumnOutSchema()
-columns_list_out_schema = ColumnOutSchema(many=True)
+column_dump_schema = ColumnDumpSchema()
+column_listed_dump_schema = ColumnDumpSchema(many=True)
 API_SPEC.components.schema("ColumnPostSchema", schema=ColumnPostSchema)
 API_SPEC.components.schema("ColumnPutSchema", schema=ColumnPutSchema)
-API_SPEC.components.schema("ColumnOutSchema", schema=ColumnOutSchema)
+API_SPEC.components.schema("ColumnDumpSchema", schema=ColumnDumpSchema)
 
 
-class ColumnsListInSchema(ListInSchema):
+class ColumnListQuerySchema(ListSchema):
     class OrderingMap(XEnum):
         CREATED_AT_ASC = (
             "-created_at",
@@ -73,5 +73,5 @@ class ColumnsListInSchema(ListInSchema):
         strict = True
 
 
-columns_in_list_schema = ColumnsListInSchema()
-API_SPEC.components.schema("ColumnsListInSchema", schema=ColumnsListInSchema)
+column_list_query_schema = ColumnListQuerySchema()
+API_SPEC.components.schema("ColumnListQuerySchema", schema=ColumnListQuerySchema)

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Boards views."""
 from flask_babel import lazy_gettext as _
 from flask import Blueprint
@@ -7,10 +6,10 @@ from flask_jwt_extended import jwt_required, get_current_user
 
 from .constants import BOARDS_PREFIX
 from .schemas.basic_schemas import (
-    board_in_schema,
-    boards_in_list_schema,
-    boards_list_out_schema,
-    board_out_schema,
+    board_put_schema,
+    board_list_query_schema,
+    board_list_dump_schema,
+    board_dump_schema,
 )
 from ..core.helpers.listed_response import listed_response
 from ..core.models.db_models import Board, Permission
@@ -22,8 +21,8 @@ blueprint = Blueprint("boards", __name__, url_prefix=BOARDS_PREFIX)
 
 @blueprint.route("", methods=("post",))
 @jwt_required
-@use_kwargs(board_in_schema)
-@marshal_with(board_out_schema)
+@use_kwargs(board_put_schema)
+@marshal_with(board_dump_schema)
 def create_boards(**kwargs):
     data = kwargs
     # Check name, owner_uuid are unique for board
@@ -43,7 +42,7 @@ def create_boards(**kwargs):
 
 @blueprint.route("", methods=("get",))
 @jwt_required
-@use_kwargs(boards_in_list_schema)
+@use_kwargs(board_list_query_schema)
 def get_list_boards(**kwargs):
     data = kwargs
     user = get_current_user()
@@ -51,14 +50,14 @@ def get_list_boards(**kwargs):
     boards = Board.query.join(Permission).filter(Permission.user_uuid == user.uuid)
     # Serialize to paginated response
     data = listed_response.serialize(
-        query=boards, query_params=data, schema=boards_list_out_schema
+        query=boards, query_params=data, schema=board_list_dump_schema
     )
     return data
 
 
 @blueprint.route("/<board_uuid>", methods=("get",))
 @jwt_required
-@marshal_with(board_out_schema)
+@marshal_with(board_dump_schema)
 def get_board_by_uuid(board_uuid):
     # board_uuid in request url
     if not is_uuid(board_uuid):

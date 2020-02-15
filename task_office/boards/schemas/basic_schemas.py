@@ -6,14 +6,14 @@ from marshmallow.validate import Length
 from marshmallow_enum import EnumField
 
 from task_office.auth import User
-from task_office.auth.schemas import UserSchemaNested
 from task_office.core.enums import XEnum
-from task_office.core.schemas import BaseSchema, ListInSchema, XSchema
+from task_office.core.schemas.base_schemas import BaseSchema, ListSchema, XSchema
+from task_office.core.schemas.nested_schemas import NestedUserDumpSchema
 from task_office.core.validators import PKExists
 from task_office.swagger import API_SPEC
 
 
-class BoardInSchema(BaseSchema):
+class BoardPutSchema(BaseSchema):
     name = fields.Str(required=True, allow_none=False, validate=[Length(max=255)])
     description = fields.Str(allow_none=True, required=False, default="")
     owner_uuid = fields.UUID(required=True, validate=[PKExists(User, "uuid")])
@@ -27,10 +27,10 @@ class BoardInSchema(BaseSchema):
         data["owner_uuid"] = str(data.pop("owner_uuid"))
 
 
-class BoardOutSchema(BaseSchema):
+class BoardDumpSchema(BaseSchema):
     name = fields.Str(dump_only=True)
     description = fields.Str(dump_only=True)
-    owner = fields.Nested(UserSchemaNested, dump_only=True)
+    owner = fields.Nested(NestedUserDumpSchema, dump_only=True)
     is_active = fields.Boolean(dump_only=True)
 
     class Meta:
@@ -41,14 +41,14 @@ class BoardOutSchema(BaseSchema):
         data["uuid"] = uuid.UUID(data.pop("uuid")).hex
 
 
-board_in_schema = BoardInSchema()
-board_out_schema = BoardOutSchema()
-boards_list_out_schema = BoardOutSchema(many=True)
-API_SPEC.components.schema("BoardInSchema", schema=BoardInSchema)
-API_SPEC.components.schema("BoardOutSchema", schema=BoardOutSchema)
+board_put_schema = BoardPutSchema()
+board_dump_schema = BoardDumpSchema()
+board_list_dump_schema = BoardDumpSchema(many=True)
+API_SPEC.components.schema("BoardPutSchema", schema=BoardPutSchema)
+API_SPEC.components.schema("BoardDumpSchema", schema=BoardDumpSchema)
 
 
-class BoardListInSchema(ListInSchema):
+class BoardListQuerySchema(ListSchema):
     class OrderingMap(XEnum):
         pass
 
@@ -59,5 +59,5 @@ class BoardListInSchema(ListInSchema):
         strict = True
 
 
-boards_in_list_schema = BoardListInSchema()
-API_SPEC.components.schema("BoardInListSchema", schema=BoardListInSchema)
+board_list_query_schema = BoardListQuerySchema()
+API_SPEC.components.schema("BoardListQuerySchema", schema=BoardListQuerySchema)

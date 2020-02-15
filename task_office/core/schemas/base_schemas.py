@@ -49,7 +49,7 @@ class BaseSchema(XSchema):
         return data
 
 
-class ListInSchema(XSchema):
+class ListSchema(XSchema):
     error_messages = {
         "max_limit_exceeded": _("Max limit {} exceeded").format(CONFIG.MAX_LIMIT_VALUE)
     }
@@ -64,4 +64,4 @@ class ListInSchema(XSchema):
             self.throw_error(value="", key_error="max_limit_exceeded", code=400)
 
 
-list_in_schema = ListInSchema()
+list_schema = ListSchema()

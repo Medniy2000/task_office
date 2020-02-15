@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """The app module, containing the app factory function."""
 from flask import Flask
 from task_office.auth.jwt_error_handlers import jwt_errors_map

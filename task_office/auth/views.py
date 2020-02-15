@@ -28,6 +28,10 @@ blueprint = Blueprint("auth", __name__, url_prefix=CONFIG.API_V1_PREFIX + "/auth
 @use_kwargs(user_signup_schema)
 @marshal_with(user_schema)
 def sign_up(**kwargs):
+    """
+    :param kwargs:
+    :return:
+    """
     data = kwargs
     data.pop("password_confirm")
     user = User(**data)
@@ -39,6 +43,10 @@ def sign_up(**kwargs):
 @use_kwargs(user_signin_schema)
 @marshal_with(signed_schema)
 def sign_in(**kwargs):
+    """
+    :param kwargs:
+    :return:
+    """
     data = kwargs
     refresh_lf = datetime.timestamp(
         datetime.utcnow() + CONFIG.JWT_REFRESH_TOKEN_EXPIRES
@@ -65,6 +73,10 @@ def sign_in(**kwargs):
 @jwt_refresh_token_required
 @marshal_with(refreshed_access_tokens_schema)
 def refresh(**kwargs):
+    """
+    :param kwargs:
+    :return:
+    """
     current_user = User.get_by_id(get_jwt_identity())
     access_lf = datetime.timestamp(datetime.utcnow() + CONFIG.JWT_ACCESS_TOKEN_EXPIRES)
     return {

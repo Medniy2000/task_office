@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Extensions module. Each extension is initialized in the app factory located in app.py."""
 from flask import g, request
 from flask_babel import Babel

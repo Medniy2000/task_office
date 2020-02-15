@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Columns views."""
 from datetime import datetime
 
@@ -8,12 +7,12 @@ from flask_babel import lazy_gettext as _
 from flask_jwt_extended import jwt_required
 from sqlalchemy import func
 
-from task_office.boards.constants import BOARD_RETRIEVE_URL
+from .constants import COLUMNS_PREFIX
 from .schemas.basic_schemas import (
     column_post_schema,
-    columns_in_list_schema,
-    columns_list_out_schema,
-    column_out_schema,
+    column_list_query_schema,
+    column_listed_dump_schema,
+    column_dump_schema,
     column_put_schema,
 )
 from .utils import reset_columns_ordering
@@ -23,7 +22,7 @@ from ..core.utils import validate_request_url_uuid, non_empty_query_required
 from ..exceptions import InvalidUsage
 from ..extensions import db
 
-blueprint = Blueprint("columns", __name__, url_prefix=BOARD_RETRIEVE_URL + "/columns")
+blueprint = Blueprint("columns", __name__, url_prefix=COLUMNS_PREFIX)
 
 
 @blueprint.route("/meta", methods=("get",))
@@ -40,8 +39,13 @@ def get_meta_data(board_uuid):
 @blueprint.route("", methods=("post",))
 @jwt_required
 @use_kwargs(column_post_schema)
-@marshal_with(column_out_schema)
+@marshal_with(column_dump_schema)
 def create_column(board_uuid, **kwargs):
+    """
+    :param board_uuid:
+    :param kwargs:
+    :return:
+    """
     data = kwargs
     validate_request_url_uuid(Board, "uuid", board_uuid, True)
 
@@ -80,8 +84,14 @@ def create_column(board_uuid, **kwargs):
 @blueprint.route("/<column_uuid>", methods=("put",))
 @jwt_required
 @use_kwargs(column_put_schema)
-@marshal_with(column_out_schema)
+@marshal_with(column_dump_schema)
 def update_column(board_uuid, column_uuid, **kwargs):
+    """
+    :param board_uuid:
+    :param column_uuid:
+    :param kwargs:
+    :return:
+    """
     data = kwargs
 
     validate_request_url_uuid(Board, "uuid", board_uuid, True)
@@ -129,8 +139,13 @@ def update_column(board_uuid, column_uuid, **kwargs):
 
 @blueprint.route("", methods=("get",))
 @jwt_required
-@use_kwargs(columns_in_list_schema)
+@use_kwargs(column_list_query_schema)
 def get_list_columns(board_uuid, **kwargs):
+    """
+    :param board_uuid:
+    :param kwargs:
+    :return:
+    """
     data = kwargs
 
     # Check board_uuid in request_url
@@ -142,6 +157,6 @@ def get_list_columns(board_uuid, **kwargs):
 
     # Serialize to paginated response
     data = listed_response.serialize(
-        query=columns, query_params=data, schema=columns_list_out_schema
+        query=columns, query_params=data, schema=column_listed_dump_schema
     )
     return data

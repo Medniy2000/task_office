@@ -6,7 +6,7 @@ from marshmallow import fields, post_dump, validates_schema
 from marshmallow.validate import Length
 
 from task_office.auth.models import User
-from task_office.core.schemas import BaseSchema, XSchema
+from task_office.core.schemas.base_schemas import BaseSchema, XSchema
 from task_office.core.validators import Unique
 from task_office.swagger import API_SPEC
 
@@ -20,23 +20,8 @@ class UserSchema(BaseSchema):
         strict = True
 
 
-class UserSchemaNested(XSchema):
-    uuid = fields.UUID(dump_only=True)
-    username = fields.Str(dump_only=True)
-    email = fields.Email(dump_only=True)
-
-    @post_dump
-    def dump_data(self, data, **kwargs):
-        data["uuid"] = uuid.UUID(data.pop("uuid")).hex
-        return data
-
-    class Meta:
-        strict = True
-
-
 user_schema = UserSchema()
 user_schemas = UserSchema(many=True)
-user_schema_nested = UserSchemaNested()
 
 
 class UserSignUpSchema(XSchema):
@@ -123,7 +108,6 @@ token_schema = TokenSchema()
 
 
 API_SPEC.components.schema("UserSchema", schema=UserSchema)
-API_SPEC.components.schema("UserSchemaNested", schema=UserSchemaNested)
 API_SPEC.components.schema("UserSignInSchema", schema=UserSignInSchema)
 API_SPEC.components.schema("UserSignUpSchema", schema=UserSignUpSchema)
 API_SPEC.components.schema("TokenSchema", schema=TokenSchema)
