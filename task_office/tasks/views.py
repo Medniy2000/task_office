@@ -166,11 +166,7 @@ def get_list_tasks(board_uuid, **kwargs):
     # Check board_uuid in request_url
     validate_request_url_uuid(Board, "uuid", board_uuid, True)
 
-    tasks = (
-        Task.query.join(BoardColumn)
-        .filter(BoardColumn.board_uuid == board_uuid)
-        .order_by(Task.position.asc())
-    )
+    tasks = Task.query.join(BoardColumn).filter(BoardColumn.board_uuid == board_uuid)
 
     # Serialize to paginated response
     data = listed_response.serialize(

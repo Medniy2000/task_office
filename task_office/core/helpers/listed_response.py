@@ -10,7 +10,7 @@ class ListedResponseHelper:
     @staticmethod
     def _get_query_filtered(query, filter_params):
         if filter_params:
-            query.filter(**filter_params)
+            query = query.filter(**filter_params)
         return query
 
     @staticmethod

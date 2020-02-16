@@ -1,7 +1,6 @@
-# coding: utf-8
 import uuid
 
-from marshmallow import fields, post_dump, validates_schema
+from marshmallow import fields, post_dump, validates_schema, pre_load
 from marshmallow.validate import Length, Range
 from marshmallow_enum import EnumField
 
@@ -12,6 +11,7 @@ from task_office.core.schemas.nested_schemas import NestedUserDumpSchema
 from task_office.core.validators import PKExists
 from task_office.settings import CONFIG
 from task_office.swagger import API_SPEC
+from task_office.tasks.schemas.search_schemas import SearchTaskSchema
 
 
 class TaskPostSchema(BaseSchema):
@@ -107,22 +107,26 @@ API_SPEC.components.schema("TaskDumpSchema", schema=TaskDumpSchema)
 
 class TaskListQuerySchema(ListSchema):
     class OrderingMap(XEnum):
-        CREATED_AT_ASC = (
-            "-created_at",
-            BoardColumn.created_at.asc(),
-            OrderingDirection.ASC,
-        )
-        CREATED_AET_DESC = (
-            "created_at",
-            BoardColumn.created_at.desc(),
-            OrderingDirection.DESC,
-        )
+        CREATED_AT_ASC = ("-created_at", Task.created_at.asc(), OrderingDirection.ASC)
+        CREATED_AT_DESC = ("created_at", Task.created_at.desc(), OrderingDirection.DESC)
+        POSITION_ASC = ("-position", Task.position.asc(), OrderingDirection.ASC)
+        POSITION_DESC = ("position", Task.position.desc(), OrderingDirection.DESC)
 
-    searching = fields.Nested(XSchema, required=False)
-    ordering = EnumField(OrderingMap, required=False, by_value=True)
+    searching = fields.Nested(SearchTaskSchema, required=False)
+    ordering = EnumField(
+        OrderingMap,
+        required=False,
+        by_value=True,
+        default=OrderingMap.POSITION_DESC.value,
+    )
 
     class Meta:
         strict = True
+
+    @pre_load
+    def preload_data(self, data, **kwargs):
+        data["ordering"] = data.get("ordering", self.OrderingMap.POSITION_ASC)
+        return data
 
 
 task_list_query_schema = TaskListQuerySchema()
