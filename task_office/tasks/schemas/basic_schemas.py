@@ -6,7 +6,7 @@ from marshmallow_enum import EnumField
 
 from task_office.core.enums import XEnum, OrderingDirection
 from task_office.core.models.db_models import BoardColumn, Task
-from task_office.core.schemas.base_schemas import BaseSchema, ListSchema, XSchema
+from task_office.core.schemas.base_schemas import BaseSchema, ListSchema, SearchSchema
 from task_office.core.schemas.nested_schemas import NestedUserDumpSchema
 from task_office.core.validators import PKExists
 from task_office.settings import CONFIG
@@ -131,3 +131,45 @@ class TaskListQuerySchema(ListSchema):
 
 task_list_query_schema = TaskListQuerySchema()
 API_SPEC.components.schema("TaskListQuerySchema", schema=TaskListQuerySchema)
+
+
+class ColumnWithTasksDumpSchema(BaseSchema):
+    name = fields.Str(dump_only=True)
+    position = fields.Integer(dump_only=True)
+    tasks = fields.Nested(TaskDumpSchema, many=True)
+
+    @post_dump
+    def dump_data(self, data, **kwargs):
+        data["uuid"] = uuid.UUID(data.pop("uuid")).hex
+        return data
+
+    class Meta:
+        strict = True
+
+
+columns_listed_dump_schema = ColumnWithTasksDumpSchema(many=True)
+API_SPEC.components.schema(
+    "ColumnWithTasksDumpSchema", schema=ColumnWithTasksDumpSchema
+)
+
+
+class TaskListByColumnsQuerySchema(ListSchema):
+    class OrderingMap(XEnum):
+        POSITION_ASC = ("-position", BoardColumn.position.asc(), OrderingDirection.ASC)
+        POSITION_DESC = (
+            "position",
+            BoardColumn.position.desc(),
+            OrderingDirection.DESC,
+        )
+
+    searching = fields.Nested(SearchSchema, required=False)
+    ordering = EnumField(OrderingMap, required=False, by_value=True)
+
+    class Meta:
+        strict = True
+
+
+task_list_by_columns_query_schema = TaskListByColumnsQuerySchema()
+API_SPEC.components.schema(
+    "TaskListByColumnsQuerySchema", schema=TaskListByColumnsQuerySchema
+)

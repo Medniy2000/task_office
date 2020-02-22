@@ -7,6 +7,7 @@ from flask_apispec import use_kwargs, marshal_with
 from flask_babel import lazy_gettext as _
 from flask_jwt_extended import jwt_required, get_current_user
 from sqlalchemy import func
+from sqlalchemy.orm import aliased
 
 from .constants import TASKS_PREFIX
 from .schemas.basic_schemas import (
@@ -15,8 +16,11 @@ from .schemas.basic_schemas import (
     task_post_schema,
     task_dump_schema,
     task_put_schema,
+    task_list_by_columns_query_schema,
+    columns_listed_dump_schema,
 )
 from .utils import reset_tasks_ordering
+from ..auth import User
 from ..core.helpers.listed_response import listed_response
 from ..core.models.db_models import BoardColumn, Board, Task
 from ..core.utils import validate_request_url_uuid, non_empty_query_required
@@ -171,5 +175,27 @@ def get_list_tasks(board_uuid, **kwargs):
     # Serialize to paginated response
     data = listed_response.serialize(
         query=tasks, query_params=data, schema=tasks_listed_dump_schema
+    )
+    return data
+
+
+@blueprint.route("/by-columns", methods=("get",))
+@jwt_required
+@use_kwargs(task_list_by_columns_query_schema)
+def get_list_tasks_by_columns(board_uuid, **kwargs):
+    """
+    :param board_uuid:
+    :param kwargs:
+    :return:
+    """
+    data = kwargs
+
+    # Check board_uuid in request_url
+    validate_request_url_uuid(Board, "uuid", board_uuid, True)
+
+    columns_with_tasks = BoardColumn.query.filter(BoardColumn.board_uuid == board_uuid)
+    # Serialize to paginated response
+    data = listed_response.serialize(
+        query=columns_with_tasks, query_params=data, schema=columns_listed_dump_schema
     )
     return data

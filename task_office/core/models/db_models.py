@@ -106,7 +106,9 @@ class Task(PKMixin, DTMixin, Model):
     position = Column(db.Integer(), default=0)
 
     column_uuid = reference_col("columns", pk_name="uuid", nullable=False)
-    column = relationship("BoardColumn", backref=db.backref("tasks"))
+    column = relationship(
+        "BoardColumn", backref=db.backref(name="tasks", order_by="Task.position.asc()")
+    )
 
     creator_uuid = reference_col("users", pk_name="uuid", nullable=False)
     creator = relationship("User", backref=db.backref("tasks"))

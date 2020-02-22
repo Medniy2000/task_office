@@ -1,4 +1,3 @@
-# coding: utf-8
 import uuid
 
 from marshmallow import fields, post_dump
@@ -32,11 +31,9 @@ class ColumnPutSchema(BaseSchema):
 class ColumnDumpSchema(BaseSchema):
     name = fields.Str(dump_only=True)
     position = fields.Integer(dump_only=True)
-    board_uuid = fields.UUID(dump_only=True)
 
     @post_dump
     def dump_data(self, data, **kwargs):
-        data["board_uuid"] = uuid.UUID(data.pop("board_uuid")).hex
         data["uuid"] = uuid.UUID(data.pop("uuid")).hex
         return data
 
