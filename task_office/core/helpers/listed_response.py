@@ -1,3 +1,6 @@
+from task_office.core.utils import lookup_filter
+
+
 class ListedResponseHelper:
     RESPONSE_TEMPLATE = {"count": 0, "results": []}
 
@@ -10,7 +13,8 @@ class ListedResponseHelper:
     @staticmethod
     def _get_query_filtered(query, filter_params):
         if filter_params:
-            query = query.filter(**filter_params)
+            for k, v in filter_params.items():
+                query = lookup_filter(query, v["key"], v["value"], v["lookup"])
         return query
 
     @staticmethod

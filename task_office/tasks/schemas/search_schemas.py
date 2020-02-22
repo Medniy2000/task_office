@@ -1,20 +1,25 @@
-from marshmallow import fields, pre_load
+from marshmallow import fields
 
-from task_office.core.schemas.base_schemas import XSchema
+from task_office.core.models.db_models import Task
+from task_office.core.schemas.base_schemas import SearchSchema
 from task_office.swagger import API_SPEC
 
 
-class SearchTaskSchema(XSchema):
+class SearchTaskSchema(SearchSchema):
+    FIELDS_MAP = {
+        "label": Task.label,
+        "name": Task.name,
+        "description": Task.description,
+        "position": Task.position,
+    }
+
     label = fields.Str(required=False, allow_none=False)
     name = fields.Str(required=False, allow_none=False)
     description = fields.Str(required=False)
+    position = fields.Integer(required=False)
 
     class Meta:
         strict = True
-
-    @pre_load
-    def preload_data(self, data, **kwargs):
-        return data
 
 
 search_task_schema = SearchTaskSchema()

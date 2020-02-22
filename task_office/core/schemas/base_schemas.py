@@ -2,7 +2,7 @@ import logging
 import uuid
 
 from flask_babel import lazy_gettext as _
-from marshmallow import Schema, fields, validates_schema, post_dump
+from marshmallow import Schema, fields, validates_schema, post_dump, post_load
 
 from task_office.exceptions import InvalidUsage
 from task_office.settings import CONFIG
@@ -65,3 +65,21 @@ class ListSchema(XSchema):
 
 
 list_schema = ListSchema()
+
+
+class SearchSchema(XSchema):
+    FIELDS_MAP = {}
+
+    @post_load
+    def post_load_data(self, data, **kwargs):
+        res = {}
+        for k, v in data.items():
+            k_separated = k.split("__")
+            key = k_separated[0]
+            key_mapped = self.FIELDS_MAP[key]
+            lookup = k_separated[1] if "__" in k else ""
+            res[key] = {"value": v, "lookup": lookup, "key": key_mapped}
+        return res
+
+
+search_schema = SearchSchema()
