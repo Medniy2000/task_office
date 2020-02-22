@@ -1,10 +1,11 @@
 import uuid
 
+from flask_babel import lazy_gettext as _
 from marshmallow import fields, post_dump, validates_schema, pre_load
 from marshmallow.validate import Length, Range
 from marshmallow_enum import EnumField
 
-from task_office.core.enums import XEnum, OrderingDirection
+from task_office.core.enums import XEnum
 from task_office.core.models.db_models import BoardColumn, Task
 from task_office.core.schemas.base_schemas import BaseSchema, ListSchema, SearchSchema
 from task_office.core.schemas.nested_schemas import NestedUserDumpSchema
@@ -106,13 +107,15 @@ API_SPEC.components.schema("TaskDumpSchema", schema=TaskDumpSchema)
 
 
 class TaskListQuerySchema(ListSchema):
-    class OrderingMap(XEnum):
-        CREATED_AT_ASC = ("-created_at", Task.created_at.asc(), OrderingDirection.ASC)
-        CREATED_AT_DESC = ("created_at", Task.created_at.desc(), OrderingDirection.DESC)
-        POSITION_ASC = ("-position", Task.position.asc(), OrderingDirection.ASC)
-        POSITION_DESC = ("position", Task.position.desc(), OrderingDirection.DESC)
+    SEARCHING_SCHEMA = SearchTaskSchema
 
-    searching = fields.Nested(SearchTaskSchema, required=False)
+    class OrderingMap(XEnum):
+        CREATED_AT_ASC = ("-created_at", Task.created_at.asc(), _("ascending"))
+        CREATED_AT_DESC = ("created_at", Task.created_at.desc(), _("descending"))
+        POSITION_ASC = ("-position", Task.position.asc(), _("ascending"))
+        POSITION_DESC = ("position", Task.position.desc(), _("descending"))
+
+    searching = fields.Nested(SEARCHING_SCHEMA, required=False)
     ordering = EnumField(
         OrderingMap,
         required=False,
@@ -154,15 +157,13 @@ API_SPEC.components.schema(
 
 
 class TaskListByColumnsQuerySchema(ListSchema):
-    class OrderingMap(XEnum):
-        POSITION_ASC = ("-position", BoardColumn.position.asc(), OrderingDirection.ASC)
-        POSITION_DESC = (
-            "position",
-            BoardColumn.position.desc(),
-            OrderingDirection.DESC,
-        )
+    SEARCHING_SCHEMA = SearchSchema
 
-    searching = fields.Nested(SearchSchema, required=False)
+    class OrderingMap(XEnum):
+        POSITION_ASC = ("-position", BoardColumn.position.asc(), _("ascending"))
+        POSITION_DESC = ("position", BoardColumn.position.desc(), _("descending"))
+
+    searching = fields.Nested(SEARCHING_SCHEMA, required=False)
     ordering = EnumField(OrderingMap, required=False, by_value=True)
 
     class Meta:
