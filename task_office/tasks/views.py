@@ -19,7 +19,7 @@ from .schemas.basic_schemas import (
 )
 from .utils import reset_tasks_ordering
 from ..core.helpers.listed_response import listed_response
-from ..core.models.db_models import BoardColumn, Board, Task
+from ..core.models.db_models import BoardColumn, Board, Task, User
 from ..core.utils import validate_request_url_uuid, non_empty_query_required
 from ..exceptions import InvalidUsage
 from ..extensions import db
@@ -97,6 +97,11 @@ def create_task(board_uuid, **kwargs):
     user_uuid = str(user.uuid) if user else None
     data["creator_uuid"] = user_uuid
 
+    # getting performers before task save
+    if data.get("performers", None):
+        performers = User.query.filter(User.uuid.in_(data["performers"])).all()
+        data["performers"] = performers
+
     # save task
     task = Task(**data)
     task.save()
@@ -157,9 +162,17 @@ def update_task(board_uuid, task_uuid, **kwargs):
             )
 
     if data:
+
+        # getting performers before task save
+        if data.get("performers", None):
+            performers = User.query.filter(User.uuid.in_(data["performers"])).all()
+            data["performers"] = performers
+
         old_position = task.position
+
         task.update(updated_at=datetime.utcnow(), **data)
         task.save()
+
         if position is not None and position > 1:
             reset_tasks_ordering(task, data["column_uuid"], position, old_position)
 

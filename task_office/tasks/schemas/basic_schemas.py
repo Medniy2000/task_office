@@ -6,7 +6,7 @@ from marshmallow.validate import Length, Range
 from marshmallow_enum import EnumField
 
 from task_office.core.enums import XEnum
-from task_office.core.models.db_models import BoardColumn, Task
+from task_office.core.models.db_models import BoardColumn, Task, User
 from task_office.core.schemas.base_schemas import BaseSchema, ListSchema, SearchSchema
 from task_office.core.schemas.nested_schemas import NestedUserDumpSchema
 from task_office.core.validators import PKExists
@@ -39,6 +39,13 @@ class TaskPostSchema(BaseSchema):
     column_uuid = fields.UUID(
         required=True, validate=[PKExists(BoardColumn, "uuid")], allow_none=False
     )
+    performers = fields.List(
+        fields.UUID(
+            required=False, validate=[PKExists(User, "uuid")], allow_none=False
+        ),
+        required=False,
+        allow_none=False,
+    )
 
     class Meta:
         strict = True
@@ -47,6 +54,8 @@ class TaskPostSchema(BaseSchema):
     def validate_schema(self, data, **kwargs):
         data["column_uuid"] = str(data.pop("column_uuid"))
         data["state"] = data.pop("state", Task.State.NEW).value
+        if data.get("performers", None):
+            data["performers"] = [str(item) for item in data["performers"]]
 
 
 class TaskPutSchema(BaseSchema):
@@ -63,6 +72,13 @@ class TaskPutSchema(BaseSchema):
     column_uuid = fields.UUID(
         required=True, validate=[PKExists(BoardColumn, "uuid")], allow_none=False
     )
+    performers = fields.List(
+        fields.UUID(
+            required=False, validate=[PKExists(User, "uuid")], allow_none=False
+        ),
+        required=False,
+        allow_none=False,
+    )
 
     class Meta:
         strict = True
@@ -73,6 +89,8 @@ class TaskPutSchema(BaseSchema):
         state = data.get("state", None)
         if state is not None:
             data["state"] = state.value
+        if data.get("performers", None):
+            data["performers"] = [str(item) for item in data["performers"]]
 
 
 class TaskDumpSchema(BaseSchema):
@@ -85,7 +103,7 @@ class TaskDumpSchema(BaseSchema):
     state = fields.Integer(dump_only=True)
     position = fields.Integer(dump_only=True)
     column_uuid = fields.UUID(dump_only=True)
-    performers = NestedUserDumpSchema(many=True)
+    performers = fields.Nested(NestedUserDumpSchema, many=True)
 
     @post_dump
     def dump_data(self, data, **kwargs):

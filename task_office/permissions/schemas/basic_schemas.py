@@ -1,4 +1,3 @@
-# coding: utf-8
 import uuid
 
 from marshmallow import fields, validates_schema, post_dump
