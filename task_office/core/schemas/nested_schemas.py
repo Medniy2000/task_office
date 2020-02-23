@@ -1,4 +1,3 @@
-# coding: utf-8
 import uuid
 
 from marshmallow import fields, post_dump
@@ -22,6 +21,7 @@ class NestedUserDumpSchema(XSchema):
 
 
 nested_user_dump_schema = NestedUserDumpSchema()
+nested_user_list_dump_schema = NestedUserDumpSchema(many=True)
 
 
 class NestedColumnDumpSchema(XSchema):

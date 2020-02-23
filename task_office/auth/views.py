@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """User views."""
 from datetime import datetime
 
@@ -11,7 +10,6 @@ from flask_jwt_extended import (
     get_jwt_identity,
 )
 
-from .models import User
 from .schemas import (
     user_schema,
     user_signup_schema,
@@ -19,6 +17,7 @@ from .schemas import (
     signed_schema,
     refreshed_access_tokens_schema,
 )
+from ..core.models.db_models import User
 from ..settings import CONFIG
 
 blueprint = Blueprint("auth", __name__, url_prefix=CONFIG.API_V1_PREFIX + "/auth")

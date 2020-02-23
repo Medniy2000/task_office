@@ -1,8 +1,8 @@
 """Boards views."""
-from flask_babel import lazy_gettext as _
 from flask import Blueprint
 from flask_apispec import use_kwargs, marshal_with
 from flask_jwt_extended import jwt_required, get_current_user
+from sqlalchemy.orm import aliased
 
 from .constants import BOARDS_PREFIX
 from .schemas.basic_schemas import (
@@ -10,11 +10,12 @@ from .schemas.basic_schemas import (
     board_list_query_schema,
     board_list_dump_schema,
     board_dump_schema,
+    user_list_by_board_query_schema,
 )
 from ..core.helpers.listed_response import listed_response
-from ..core.models.db_models import Board, Permission
-from ..core.utils import is_uuid, empty_query_required, non_empty_query_required
-from ..exceptions import InvalidUsage
+from ..core.models.db_models import Board, Permission, User
+from ..core.schemas.nested_schemas import nested_user_list_dump_schema
+from ..core.utils import empty_query_required, validate_request_url_uuid
 
 blueprint = Blueprint("boards", __name__, url_prefix=BOARDS_PREFIX)
 
@@ -58,11 +59,28 @@ def get_list_boards(**kwargs):
 @blueprint.route("/<board_uuid>", methods=("get",))
 @jwt_required
 @marshal_with(board_dump_schema)
-def get_board_by_uuid(board_uuid):
-    # board_uuid in request url
-    if not is_uuid(board_uuid):
-        raise InvalidUsage(messages=[_("Not found")], status_code=404)
+def get_board(board_uuid):
 
-    board = non_empty_query_required(Board, uuid=str(board_uuid))[1]
+    board = validate_request_url_uuid(Board, "uuid", board_uuid, True)[1]
 
     return board
+
+
+@blueprint.route("/<board_uuid>/users", methods=("get",))
+@jwt_required
+@use_kwargs(user_list_by_board_query_schema)
+def get_board_users(board_uuid, **kwargs):
+    data = kwargs
+
+    # board_uuid in request url
+    validate_request_url_uuid(Board, "uuid", board_uuid, True)
+
+    perms_q = aliased(
+        Permission.query.filter(Permission.board_uuid == board_uuid).subquery(),
+        name="perms",
+    )
+    users_q = User.query.join(perms_q).filter()
+    data = listed_response.serialize(
+        query=users_q, query_params=data, schema=nested_user_list_dump_schema
+    )
+    return data

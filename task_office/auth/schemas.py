@@ -1,11 +1,8 @@
-# coding: utf-8
-import uuid
-
 from flask_babel import lazy_gettext as _
-from marshmallow import fields, post_dump, validates_schema
+from marshmallow import fields, validates_schema
 from marshmallow.validate import Length
 
-from task_office.auth.models import User
+from task_office.core.models.db_models import User
 from task_office.core.schemas.base_schemas import BaseSchema, XSchema
 from task_office.core.validators import Unique
 from task_office.swagger import API_SPEC

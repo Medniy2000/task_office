@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Union, Tuple
 from uuid import UUID
 
 from flask import request
@@ -38,7 +38,7 @@ def lookup_filter(
     return LOOKUP_MAP.get(lookup, LOOKUP_MAP.get("e"))(query, key, value)
 
 
-def is_uuid(uuid):
+def is_uuid(uuid) -> bool:
     try:
         UUID(uuid).version
         return True
@@ -48,13 +48,15 @@ def is_uuid(uuid):
 
 def validate_request_url_uuid(
     model: Model, key: str, uuid: str, must_exists: bool = False
-):
+) -> Union[Tuple, None]:
     if not is_uuid(uuid):
         raise InvalidUsage(messages=[_("Not found")], status_code=404)
 
-    request_url_splitted = request.url.split("/")
-    if uuid not in request_url_splitted:
+    request_url_separated = request.url.split("/")
+    if uuid not in request_url_separated:
         raise InvalidUsage(messages=[_("Not found")], status_code=404)
 
     if must_exists:
-        non_empty_query_required(model, **{key: uuid})
+        return non_empty_query_required(model, **{key: uuid})
+
+    return None

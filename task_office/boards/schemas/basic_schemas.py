@@ -1,4 +1,3 @@
-# coding: utf-8
 import uuid
 
 from marshmallow import fields, validates_schema
@@ -6,6 +5,7 @@ from marshmallow.validate import Length
 from marshmallow_enum import EnumField
 
 from task_office.auth import User
+from task_office.boards.schemas.search_schemas import SearchUserSchema
 from task_office.core.enums import XEnum
 from task_office.core.schemas.base_schemas import BaseSchema, ListSchema, XSchema
 from task_office.core.schemas.nested_schemas import NestedUserDumpSchema
@@ -61,3 +61,22 @@ class BoardListQuerySchema(ListSchema):
 
 board_list_query_schema = BoardListQuerySchema()
 API_SPEC.components.schema("BoardListQuerySchema", schema=BoardListQuerySchema)
+
+
+class UserListByBoardQuerySchema(ListSchema):
+    SEARCHING_SCHEMA = SearchUserSchema
+
+    class OrderingMap(XEnum):
+        pass
+
+    searching = fields.Nested(SEARCHING_SCHEMA, required=False)
+    ordering = EnumField(OrderingMap, required=False, by_value=True)
+
+    class Meta:
+        strict = True
+
+
+user_list_by_board_query_schema = UserListByBoardQuerySchema()
+API_SPEC.components.schema(
+    "UserListByBoardQuerySchema", schema=UserListByBoardQuerySchema
+)
