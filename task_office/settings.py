@@ -40,8 +40,6 @@ class Config(object):
     STATIC_DIR = os.path.abspath(os.path.join(PROJECT_ROOT, "static"))
     STATIC_URL = API_V1_PREFIX + "/static"
 
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
-
     CORS_ORIGIN_WHITELIST = env.list("CORS_ORIGIN_WHITELIST", [])
 
     # JWT
@@ -58,6 +56,7 @@ class Config(object):
     MAX_LIMIT_VALUE = 50
 
     # DB
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
     DATABASE = {
         "DB_NAME": env.str("POSTGRES_DB", "task_office"),
         "DB_USER": env.str("POSTGRES_USER", "task_office_user"),
@@ -72,6 +71,23 @@ class Config(object):
         db_port=DATABASE["DB_PORT"],
         db_name=DATABASE["DB_NAME"],
     )
+
+    CACHE = {
+        "CACHE_TYPE": env.str("CACHE_TYPE", "redis"),
+        "CACHE_REDIS_HOST": env.str("CACHE_REDIS_HOST"),
+        "CACHE_REDIS_PORT": env.int("CACHE_REDIS_PORT"),
+        "CACHE_REDIS_PASSWORD": env.str("CACHE_REDIS_PASSWORD"),
+        "CACHE_REDIS_DB": env.int("CACHE_REDIS_DB"),
+        "CACHE_DEFAULT_TIMEOUT": env.int(
+            "CACHE_DEFAULT_TIMEOUT", JWT_ACCESS_TOKEN_EXPIRES.seconds
+        ),
+        "CACHE_REDIS_URL": "redis://:{password}@{host}:{port}/{db}".format(
+            password=env.str("CACHE_REDIS_PASSWORD"),
+            host=env.str("CACHE_REDIS_HOST"),
+            port=env.str("CACHE_REDIS_PORT"),
+            db=env.str("CACHE_REDIS_DB"),
+        ),
+    }
 
 
 class ProdConfig(Config):

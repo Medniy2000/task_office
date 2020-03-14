@@ -33,7 +33,7 @@ def create_app(config_object):
 def register_extensions(app):
     """Register Flask extensions."""
     bcrypt.init_app(app)
-    cache.init_app(app)
+    cache.init_app(app, config=CONFIG.CACHE)
     db.init_app(app)
     jwt.init_app(app)
     migrate.init_app(app, db)
