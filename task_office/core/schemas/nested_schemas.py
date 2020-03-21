@@ -3,7 +3,7 @@ import uuid
 from marshmallow import fields, post_dump
 
 from task_office.core.schemas.base_schemas import XSchema
-from task_office.swagger import API_SPEC
+from task_office.settings import CONFIG
 
 
 class NestedUserDumpSchema(XSchema):
@@ -40,5 +40,7 @@ class NestedColumnDumpSchema(XSchema):
 nested_column_dump_schema = NestedColumnDumpSchema()
 
 
-API_SPEC.components.schema("NestedUserSchema", schema=NestedUserDumpSchema)
-API_SPEC.components.schema("NestedColumnDumpSchema", schema=NestedColumnDumpSchema)
+CONFIG.API_SPEC.components.schema("NestedUserSchema", schema=NestedUserDumpSchema)
+CONFIG.API_SPEC.components.schema(
+    "NestedColumnDumpSchema", schema=NestedColumnDumpSchema
+)

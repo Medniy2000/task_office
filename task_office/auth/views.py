@@ -20,7 +20,7 @@ from .schemas import (
 from ..core.models.db_models import User
 from ..settings import CONFIG
 
-blueprint = Blueprint("auth", __name__, url_prefix=CONFIG.API_V1_PREFIX + "/auth")
+blueprint = Blueprint("auth", __name__, url_prefix=CONFIG.API_V1_PREFIX + "auth")
 
 
 @blueprint.route("/sign-up", methods=("post",))

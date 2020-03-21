@@ -37,6 +37,7 @@ def permission(required_role: int):
                 raise InvalidUsage(messages=[_("Not allowed")], status_code=403)
             return func(*args, **kwargs)
 
+        wrapper.__name__ = func.__name__
         return wrapper
 
     return decorator

@@ -2,6 +2,9 @@
 import os
 from datetime import timedelta
 
+from apispec import APISpec
+from apispec.ext.marshmallow import MarshmallowPlugin
+from apispec_webframeworks.flask import FlaskPlugin
 from environs import Env
 
 env = Env()
@@ -23,9 +26,18 @@ class Config(object):
     PROJECT_NAME = env.str("PROJECT_NAME", "Task Office")
     SECRET_KEY = env.str("FLASK_SECRET", "secret-key")
 
-    API_V1_PREFIX = "/api/v1"
+    API_V1_PREFIX = "/api/v1/"
     API_DATETIME_FORMAT = "%Y-%m-%d %I:%M:%S"
     USE_DOCS = env.bool("USE_DOCS", False)
+
+    API_SPEC = APISpec(
+        openapi_version="3.0.2",
+        title=PROJECT_NAME,
+        version="1.0.0",
+        info=dict(description=f"{PROJECT_NAME} API"),
+        plugins=[FlaskPlugin(), MarshmallowPlugin()],
+    )
+
     FLASK_DEBUG = env.int("FLASK_DEBUG", 0)
     DEBUG_TB_INTERCEPT_REDIRECTS = False
 

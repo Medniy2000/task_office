@@ -10,7 +10,7 @@ from task_office.core.enums import XEnum
 from task_office.core.schemas.base_schemas import BaseSchema, ListSchema, XSchema
 from task_office.core.schemas.nested_schemas import NestedUserDumpSchema
 from task_office.core.validators import PKExists
-from task_office.swagger import API_SPEC
+from task_office.settings import CONFIG
 
 
 class BoardPutSchema(BaseSchema):
@@ -44,8 +44,8 @@ class BoardDumpSchema(BaseSchema):
 board_put_schema = BoardPutSchema()
 board_dump_schema = BoardDumpSchema()
 board_list_dump_schema = BoardDumpSchema(many=True)
-API_SPEC.components.schema("BoardPutSchema", schema=BoardPutSchema)
-API_SPEC.components.schema("BoardDumpSchema", schema=BoardDumpSchema)
+CONFIG.API_SPEC.components.schema("BoardPutSchema", schema=BoardPutSchema)
+CONFIG.API_SPEC.components.schema("BoardDumpSchema", schema=BoardDumpSchema)
 
 
 class BoardListQuerySchema(ListSchema):
@@ -60,7 +60,7 @@ class BoardListQuerySchema(ListSchema):
 
 
 board_list_query_schema = BoardListQuerySchema()
-API_SPEC.components.schema("BoardListQuerySchema", schema=BoardListQuerySchema)
+CONFIG.API_SPEC.components.schema("BoardListQuerySchema", schema=BoardListQuerySchema)
 
 
 class UserListByBoardQuerySchema(ListSchema):
@@ -77,6 +77,6 @@ class UserListByBoardQuerySchema(ListSchema):
 
 
 user_list_by_board_query_schema = UserListByBoardQuerySchema()
-API_SPEC.components.schema(
+CONFIG.API_SPEC.components.schema(
     "UserListByBoardQuerySchema", schema=UserListByBoardQuerySchema
 )
