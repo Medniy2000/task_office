@@ -18,8 +18,9 @@ from .schemas.basic_schemas import (
     columns_listed_dump_schema,
 )
 from .utils import reset_tasks_ordering
+from ..auth.utils import permission
 from ..core.helpers.listed_response import listed_response
-from ..core.models.db_models import BoardColumn, Board, Task, User
+from ..core.models.db_models import BoardColumn, Board, Task, User, Permission
 from ..core.utils import validate_request_url_uuid, non_empty_query_required
 from ..exceptions import InvalidUsage
 from ..extensions import db
@@ -29,6 +30,7 @@ blueprint = Blueprint("tasks", __name__, url_prefix=TASKS_PREFIX)
 
 @blueprint.route("/meta", methods=("get",))
 @jwt_required
+@permission(required_role=Permission.Role.STAFF.value)
 def get_meta_data(board_uuid):
     """
     Additional data for tasks
@@ -55,6 +57,7 @@ def get_meta_data(board_uuid):
 @jwt_required
 @use_kwargs(task_post_schema)
 @marshal_with(task_dump_schema)
+@permission(required_role=Permission.Role.EDITOR.value)
 def create_task(board_uuid, **kwargs):
     """
     :param board_uuid:
@@ -116,6 +119,7 @@ def create_task(board_uuid, **kwargs):
 @jwt_required
 @use_kwargs(task_put_schema)
 @marshal_with(task_dump_schema)
+@permission(required_role=Permission.Role.EDITOR.value)
 def update_task(board_uuid, task_uuid, **kwargs):
     """
     :param board_uuid:
@@ -182,6 +186,7 @@ def update_task(board_uuid, task_uuid, **kwargs):
 @blueprint.route("", methods=("get",))
 @jwt_required
 @use_kwargs(task_list_query_schema)
+@permission(required_role=Permission.Role.STAFF.value)
 def get_list_tasks(board_uuid, **kwargs):
     """
     :param board_uuid:
@@ -205,6 +210,7 @@ def get_list_tasks(board_uuid, **kwargs):
 @blueprint.route("/by-columns", methods=("get",))
 @jwt_required
 @use_kwargs(task_list_by_columns_query_schema)
+@permission(required_role=Permission.Role.STAFF.value)
 def get_list_tasks_by_columns(board_uuid, **kwargs):
     """
     :param board_uuid:

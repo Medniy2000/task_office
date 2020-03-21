@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
 """Permissions views."""
+import uuid
 from datetime import datetime
 
 from flask import Blueprint
@@ -14,6 +14,7 @@ from .schemas.basic_schemas import (
     permissions_list_query_schema,
     permission_list_dump_schema,
 )
+from ..auth.utils import permission, reset_cached_permissions
 from ..core.helpers.listed_response import listed_response
 from ..core.models.db_models import Permission, Board
 from ..core.utils import is_uuid, non_empty_query_required, empty_query_required
@@ -26,6 +27,7 @@ blueprint = Blueprint(
 
 @blueprint.route("/meta", methods=("get",))
 @jwt_required
+@permission(required_role=Permission.Role.EDITOR.value)
 def get_meta_data(board_uuid):
     """
     Additional data for Permissions
@@ -43,6 +45,7 @@ def get_meta_data(board_uuid):
 @jwt_required
 @use_kwargs(permission_query_schema)
 @marshal_with(permission_dump_schema)
+@permission(required_role=Permission.Role.EDITOR.value)
 def create_permission(board_uuid, **kwargs):
     """
     :param board_uuid:
@@ -65,8 +68,9 @@ def create_permission(board_uuid, **kwargs):
         ).first():
             raise InvalidUsage(messages=[_("Not allowed")], status_code=422)
 
-    permission = Permission(board_uuid=board_uuid, **data)
-    permission.save()
+    perm = Permission(board_uuid=board_uuid, **data)
+    perm.save()
+    reset_cached_permissions(uuid.UUID(perm.user_uuid).hex)
     return permission
 
 
@@ -74,6 +78,7 @@ def create_permission(board_uuid, **kwargs):
 @jwt_required
 @use_kwargs(permission_query_schema)
 @marshal_with(permission_dump_schema)
+@permission(required_role=Permission.Role.EDITOR.value)
 def update_permission(board_uuid, permission_uuid, **kwargs):
     """
     :param board_uuid:
@@ -93,18 +98,20 @@ def update_permission(board_uuid, permission_uuid, **kwargs):
         ).first():
             raise InvalidUsage(messages=[_("Not allowed")], status_code=422)
 
-    permission = non_empty_query_required(
+    perm = non_empty_query_required(
         Permission, uuid=str(permission_uuid), board_uuid=str(board_uuid)
     )[1]
 
-    permission.update(updated_at=datetime.utcnow(), **data)
-    permission.save()
+    perm.update(updated_at=datetime.utcnow(), **data)
+    perm.save()
+    reset_cached_permissions(uuid.UUID(perm.user_uuid).hex)
     return permission
 
 
 @blueprint.route("", methods=("get",))
 @jwt_required
 @use_kwargs(permissions_list_query_schema)
+@permission(required_role=Permission.Role.STAFF.value)
 def get_list_permission(board_uuid, **kwargs):
     """
     :param board_uuid:
@@ -116,11 +123,11 @@ def get_list_permission(board_uuid, **kwargs):
     if not is_uuid(board_uuid):
         raise InvalidUsage(messages=[_("Not found")], status_code=404)
 
-    permissions = non_empty_query_required(Permission, board_uuid=str(board_uuid))[0]
+    perms = non_empty_query_required(Permission, board_uuid=str(board_uuid))[0]
 
     # Serialize to paginated response
     data = listed_response.serialize(
-        query=permissions, query_params=data, schema=permission_list_dump_schema
+        query=perms, query_params=data, schema=permission_list_dump_schema
     )
     return data
 
@@ -128,6 +135,7 @@ def get_list_permission(board_uuid, **kwargs):
 @blueprint.route("/<permission_uuid>", methods=("get",))
 @jwt_required
 @marshal_with(permission_dump_schema)
+@permission(required_role=Permission.Role.STAFF.value)
 def get_permission_by_uuid(board_uuid, permission_uuid):
     """
     :param board_uuid:
@@ -138,9 +146,9 @@ def get_permission_by_uuid(board_uuid, permission_uuid):
     if not is_uuid(board_uuid) or not is_uuid(permission_uuid):
         raise InvalidUsage(messages=[_("Not found")], status_code=404)
 
-    permission = non_empty_query_required(
+    perm = non_empty_query_required(
         Permission, uuid=str(permission_uuid), board_uuid=str(board_uuid)
     )
-    permission = permission.first()
+    perm = perm[1]
 
-    return permission
+    return perm

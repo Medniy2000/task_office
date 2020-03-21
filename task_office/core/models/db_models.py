@@ -73,9 +73,9 @@ class Permission(PKMixin, DTMixin, Model):
     )
 
     class Role(XEnum):
-        OWNER = 9, _("Owner"), _("Owner of board(creator)")
-        EDITOR = 8, _("Editor"), _("Editor of board")
-        STAFF = 7, _("Staff"), _("Ordinary user")
+        OWNER = 1, _("Owner"), _("Owner of board(creator)")
+        EDITOR = 2, _("Editor"), _("Editor of board")
+        STAFF = 3, _("Staff"), _("Ordinary user")
 
     role = Column(db.Integer(), default=Role.STAFF.value)
     user_uuid = reference_col("users", pk_name="uuid", nullable=False)

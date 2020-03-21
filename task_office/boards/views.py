@@ -12,6 +12,7 @@ from .schemas.basic_schemas import (
     board_dump_schema,
     user_list_by_board_query_schema,
 )
+from ..auth.utils import permission
 from ..core.helpers.listed_response import listed_response
 from ..core.models.db_models import Board, Permission, User
 from ..core.schemas.nested_schemas import nested_user_list_dump_schema
@@ -59,6 +60,7 @@ def get_list_boards(**kwargs):
 @blueprint.route("/<board_uuid>", methods=("get",))
 @jwt_required
 @marshal_with(board_dump_schema)
+@permission(required_role=Permission.Role.STAFF.value)
 def get_board(board_uuid):
 
     board = validate_request_url_uuid(Board, "uuid", board_uuid, True)[1]
@@ -69,6 +71,7 @@ def get_board(board_uuid):
 @blueprint.route("/<board_uuid>/users", methods=("get",))
 @jwt_required
 @use_kwargs(user_list_by_board_query_schema)
+@permission(required_role=Permission.Role.STAFF.value)
 def get_board_users(board_uuid, **kwargs):
     data = kwargs
 

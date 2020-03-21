@@ -87,6 +87,7 @@ class Config(object):
             port=env.str("CACHE_REDIS_PORT"),
             db=env.str("CACHE_REDIS_DB"),
         ),
+        "OPTIONS": {"PASSWORD": env.str("CACHE_REDIS_PASSWORD")},
     }
 
 
