@@ -4,10 +4,10 @@ from flask import Blueprint, jsonify
 from flask_swagger_ui import get_swaggerui_blueprint
 
 from task_office.settings import CONFIG
+from task_office.swagger.api_paths import API_PATHS
 
 SWAGGER_URL = CONFIG.API_V1_PREFIX + "docs"
-
-API_URL = "/api/v1/docs/open-api"
+API_URL = SWAGGER_URL + "/open-api"
 
 
 blueprint = Blueprint("docs", __name__, url_prefix=SWAGGER_URL)
@@ -24,4 +24,5 @@ def api_swagger(**kwargs):
     :return:
     """
     data = CONFIG.API_SPEC.to_dict()
+    data["paths"] = API_PATHS
     return jsonify(data)

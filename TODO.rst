@@ -5,7 +5,7 @@ TODO List:
 Issues General
 ^^^^^^^^^^^^^^
 * Try to handle all errors and wrap them by our custom error class(InvalidUsage), with using translations
-* Implement Documented BluePrint
+* Implement auto-generated api docs with swagger ui
 
 Issues By Features
 ^^^^^^^^^^^^^^^^^^
