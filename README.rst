@@ -32,12 +32,22 @@ To run the web application use::
 
 Translations commands::
 
-    pybabel extract -F babel.cfg -k lazy_gettext -o messages.pot .
+    https://pythonhosted.org/Flask-Babel/
+
+    # Create(if not exists) map of translations
+    pybabel extract -F babel.cfg -k lazy_gettext -o translations/messages.pot .
+
+    # Init translations(if not exists)
     pybabel init -i messages.pot -d translations -l en
     pybabel init -i messages.pot -d translations -l uk
     pybabel init -i messages.pot -d translations -l ru
+
+    # Update map and translations
+    pybabel update -i translations/messages.pot -d translations
+
+    # Compile translations
     pybabel compile -d translations
-    pybabel update -i messages.pot -d translations
+
 
 Features
 --------
