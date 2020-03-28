@@ -34,7 +34,7 @@ class UserSignUpSchema(XSchema):
         required=True, validate=[Length(max=255), Unique(User, "email")]
     )
     username = fields.Str(
-        required=True, validate=[Length(min=6, max=80), Unique(User, "username")]
+        required=True, validate=[Length(min=3, max=80), Unique(User, "username")]
     )
 
     @validates_schema

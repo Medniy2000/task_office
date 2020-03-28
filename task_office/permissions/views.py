@@ -71,7 +71,7 @@ def create_permission(board_uuid, **kwargs):
     perm = Permission(board_uuid=board_uuid, **data)
     perm.save()
     reset_permissions(uuid.UUID(perm.user_uuid).hex)
-    return permission
+    return perm
 
 
 @blueprint.route("/<permission_uuid>", methods=("put",))
@@ -105,7 +105,7 @@ def update_permission(board_uuid, permission_uuid, **kwargs):
     perm.update(updated_at=datetime.utcnow(), **data)
     perm.save()
     reset_permissions(uuid.UUID(perm.user_uuid).hex)
-    return permission
+    return perm
 
 
 @blueprint.route("", methods=("get",))

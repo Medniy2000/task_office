@@ -28,6 +28,9 @@ database tables and perform the initial migration ::
 To run the web application use::
 
     flask run --with-threads
+    # Test user:
+        username: amigo@gmaill.com
+        password: amigo1111
 
 
 Translations commands::

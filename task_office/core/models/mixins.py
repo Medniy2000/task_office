@@ -32,6 +32,9 @@ class PKMixin(object):
         ):
             return cls.query.filter_by(id=record_id).first()
 
+    def hexed_uuid(self):
+        return uuid.UUID(str(self.uuid)).hex
+
 
 class DTMixin(object):
     """

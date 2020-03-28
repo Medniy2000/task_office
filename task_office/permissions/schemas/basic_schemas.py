@@ -45,8 +45,8 @@ class PermissionDumpSchema(BaseSchema):
 permission_query_schema = PermissionQuerySchema()
 permission_dump_schema = PermissionDumpSchema()
 permission_list_dump_schema = PermissionDumpSchema(many=True)
-CONFIG.API_SPEC.components.schema("PermissionInSchema", schema=PermissionQuerySchema)
-CONFIG.API_SPEC.components.schema("PermissionOutSchema", schema=PermissionDumpSchema)
+CONFIG.API_SPEC.components.schema("PermissionQuerySchema", schema=PermissionQuerySchema)
+CONFIG.API_SPEC.components.schema("PermissionDumpSchema", schema=PermissionDumpSchema)
 
 
 class PermissionListQuerySchema(ListSchema):

@@ -7,7 +7,6 @@ from marshmallow_enum import EnumField
 from task_office.boards.schemas.search_schemas import SearchUserSchema
 from task_office.core.enums import XEnum
 from task_office.core.schemas.base_schemas import BaseSchema, ListSchema, XSchema
-from task_office.core.schemas.nested_schemas import NestedUserDumpSchema
 from task_office.settings import CONFIG
 
 
@@ -23,7 +22,6 @@ class BoardActionsSchema(BaseSchema):
 class BoardDumpSchema(BaseSchema):
     name = fields.Str(dump_only=True)
     description = fields.Str(dump_only=True)
-    owner = fields.Nested(NestedUserDumpSchema, dump_only=True)
     is_active = fields.Boolean(dump_only=True)
 
     class Meta:

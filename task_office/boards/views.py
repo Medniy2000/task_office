@@ -36,7 +36,7 @@ def create_boards(**kwargs):
 
     # validate current user
     user = get_current_user()
-    user_uuid = str(user.uuid) if user else None
+    user_uuid = user.hexed_uuid() if user else None
     data["owner_uuid"] = user_uuid
 
     # Check name, owner_uuid are unique for board
@@ -47,8 +47,8 @@ def create_boards(**kwargs):
 
     # Create permission for creator
     Permission(
-        user_uuid=str(data["owner_uuid"]),
-        board_uuid=str(board.uuid),
+        user_uuid=data["owner_uuid"],
+        board_uuid=board.hexed_uuid(),
         role=Permission.Role.OWNER.value,
     ).save()
 

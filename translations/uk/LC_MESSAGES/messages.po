@@ -46,11 +46,11 @@ msgstr "Користувач не знайдений"
 #: task_office/auth/utils.py:57 task_office/permissions/views.py:69
 #: task_office/permissions/views.py:99
 msgid "Not allowed"
-msgstr ""
+msgstr "Не дозволено"
 
 #: task_office/columns/views.py:60 task_office/tasks/views.py:79
 msgid "Must be between {} and {}"
-msgstr ""
+msgstr "Повинний бути між {} і {}"
 
 #: task_office/columns/views.py:71 task_office/columns/views.py:121
 #: task_office/core/validators.py:10 task_office/tasks/views.py:93
@@ -60,7 +60,7 @@ msgstr "Вже існує із значенням {}"
 
 #: task_office/columns/views.py:108 task_office/tasks/views.py:142
 msgid "Must be between {} and {}."
-msgstr "Повинний бути між {} і {}"
+msgstr "Повинний бути між {} і {}."
 
 #: task_office/core/enums.py:43
 msgid "Ascend"
@@ -139,5 +139,5 @@ msgstr "Збільшення"
 #: task_office/tasks/schemas/basic_schemas.py:133
 #: task_office/tasks/schemas/basic_schemas.py:181
 msgid "Зменшення"
-msgstr ""
+msgstr "Зменшення"
 

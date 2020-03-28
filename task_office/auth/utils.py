@@ -52,8 +52,8 @@ def permission(required_role: int):
         def wrapper(*args, **kwargs):
             board_uuid = kwargs.get("board_uuid", None)
             perms = _get_cached_permissions()
-            current_role = perms.get(board_uuid, 9999999)
-            if current_role >= required_role:
+            current_role = perms.get(board_uuid, -1)
+            if current_role > required_role:
                 raise InvalidUsage(messages=[_("Not allowed")], status_code=403)
             return func(*args, **kwargs)
 
