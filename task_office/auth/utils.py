@@ -3,6 +3,7 @@ import uuid
 from flask_babel import lazy_gettext as _
 from flask_jwt_extended import get_current_user
 
+from task_office.core.models.db_models import Permission
 from task_office.exceptions import InvalidUsage
 from task_office.extensions import cache
 from task_office.settings import CONFIG
@@ -22,9 +23,28 @@ def _get_cached_permissions():
     return perms
 
 
-def reset_cached_permissions(user_uuid_hexed):
+def reset_permissions(user_uuid_hexed):
+    """
+    Clear permissions from cache
+    :param user_uuid_hexed:
+    :return:
+    """
     key = f"perms_{user_uuid_hexed}"
     return cache.delete(key)
+
+
+def reset_permissions_for_board_staff(board_uuid):
+    """
+    Clear permissions for board staff(Role.STAFF)
+    :param board_uuid:
+    :return:
+    """
+    perms = Permission.query.filter_by(
+        board_uuid=board_uuid, role=Permission.Role.STAFF.value
+    ).all()
+    for item in perms:
+        user_uuid = uuid.UUID(str(item.user_uuid)).hex
+        reset_permissions(user_uuid)
 
 
 def permission(required_role: int):

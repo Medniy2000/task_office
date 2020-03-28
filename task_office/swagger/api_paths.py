@@ -84,7 +84,7 @@ API_PATHS = {
                 "required": True,
                 "content": {
                     "application/json": {
-                        "schema": {"$ref": "#/components/schemas/BoardPutSchema"}
+                        "schema": {"$ref": "#/components/schemas/BoardActionsSchema"}
                     }
                 },
             },
@@ -140,7 +140,32 @@ API_PATHS = {
                 "404": {"description": "Failed. Not found."},
                 "422": {"description": "Failed. Bad data."},
             },
-        }
+        },
+        "put": {
+            "tags": ["Boards"],
+            "summary": "Boards update",
+            "requestBody": {
+                "description": "Boards Put Object",
+                "required": True,
+                "content": {
+                    "application/json": {
+                        "schema": {"$ref": "#/components/schemas/BoardActionsSchema"}
+                    }
+                },
+            },
+            "produces": ["application/json"],
+            "responses": {
+                "200": {
+                    "required": True,
+                    "description": "OK",
+                    "schema": {"$ref": "#/components/schemas/BoardDumpSchema"},
+                },
+                "400": {"description": "Failed. Bad data."},
+                "401": {"description": "Failed. Not authorized."},
+                "403": {"description": "Failed. Not denied."},
+                "422": {"description": "Failed. Bad data."},
+            },
+        },
     },
     "/api/v1/boards/<board_uuid>/users": {
         "get": {

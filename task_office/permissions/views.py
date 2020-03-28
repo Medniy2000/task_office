@@ -14,7 +14,7 @@ from .schemas.basic_schemas import (
     permissions_list_query_schema,
     permission_list_dump_schema,
 )
-from ..auth.utils import permission, reset_cached_permissions
+from ..auth.utils import permission, reset_permissions
 from ..core.helpers.listed_response import listed_response
 from ..core.models.db_models import Permission, Board
 from ..core.utils import is_uuid, non_empty_query_required, empty_query_required
@@ -70,7 +70,7 @@ def create_permission(board_uuid, **kwargs):
 
     perm = Permission(board_uuid=board_uuid, **data)
     perm.save()
-    reset_cached_permissions(uuid.UUID(perm.user_uuid).hex)
+    reset_permissions(uuid.UUID(perm.user_uuid).hex)
     return permission
 
 
@@ -104,7 +104,7 @@ def update_permission(board_uuid, permission_uuid, **kwargs):
 
     perm.update(updated_at=datetime.utcnow(), **data)
     perm.save()
-    reset_cached_permissions(uuid.UUID(perm.user_uuid).hex)
+    reset_permissions(uuid.UUID(perm.user_uuid).hex)
     return permission
 
 
