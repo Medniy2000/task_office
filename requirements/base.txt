@@ -10,7 +10,7 @@ psycopg2
 marshmallow
 marshmallow-enum==1.5.1
 MarkupSafe==1.1.1
-gunicorn
+gunicorn==20.0.4
 uuid
 environs
 unicode_slugify
