@@ -6,7 +6,7 @@ Flask-JWT-Extended
 Flask-Cors
 Flask_SQLAlchemy==2.2
 SQLAlchemy==1.1.9
-psycopg2
+psycopg2-binary
 marshmallow
 marshmallow-enum==1.5.1
 MarkupSafe==1.1.1

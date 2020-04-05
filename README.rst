@@ -11,11 +11,28 @@ Task Office - pet app with using Flask
 
 Run Task Office
 ^^^^^^^^^^^^^^^^^^
-Before running shell commands, set the ``FLASK_APP`` and ``FLASK_DEBUG``
-environment variables ::
 
-    export FLASK_APP=<path_to>/entry.py
-    export FLASK_DEBUG=1
+To run the app use::
+
+    $ cd <path_to_app_root>
+    $ cp .env.example .env
+
+    # run with flask wsgi:
+        # install, run postgres, redis, actualize .env
+        $ flask run --with-threads
+        # type http://127.0.0.1:5000/ in browser
+
+    # run with docker-compose:
+        # install Docker, Docker Compose
+            # https://docs.docker.com/v17.12/install/
+            # https://docs.docker.com/compose/install/
+        $ docker-compose up --build
+        # type http://localhost/ in browser
+
+Test user credentials::
+
+        username: amigo@gmaill.com
+        password: amigo1111
 
 
 Run the following commands to create your app's
@@ -24,14 +41,6 @@ database tables and perform the initial migration ::
     flask db init
     flask db migrate
     flask db upgrade
-
-To run the web application use::
-
-    flask run --with-threads
-    # Test user:
-        username: amigo@gmaill.com
-        password: amigo1111
-
 
 Translations commands::
 
@@ -52,7 +61,3 @@ Translations commands::
     pybabel compile -d translations
 
 
-Features
---------
-
-* TODO
