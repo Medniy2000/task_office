@@ -166,7 +166,6 @@ def update_task(board_uuid, task_uuid, **kwargs):
             )
 
     if data:
-
         # getting performers before task save
         if data.get("performers", None):
             performers = User.query.filter(User.uuid.in_(data["performers"])).all()

@@ -5,7 +5,9 @@ TODO List:
 Issues General
 ^^^^^^^^^^^^^^
 * Try to handle all errors and wrap them by our custom error class(InvalidUsage), with using translations
-* Implement auto-generated api docs with swagger ui
+* Implement auto-generated api
+* Improve pagination
+* Configure pytest
 
 Issues By Features
 ^^^^^^^^^^^^^^^^^^

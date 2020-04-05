@@ -18,7 +18,7 @@ class Config(object):
     PROJECT_ROOT = os.path.abspath(os.path.join(APP_DIR, os.pardir))
 
     # Environment variables setting
-    READ_DOT_ENV_FILE = env.bool("FLASK_READ_DOT_ENV_FILE", default=True)
+    READ_DOT_ENV_FILE = env.bool("FLASK_READ_DOT_ENV_FILE", default=False)
     if READ_DOT_ENV_FILE:
         # OS environment variables take precedence over variables from .env
         env.read_env(os.path.join(PROJECT_ROOT, ".env"))
@@ -63,6 +63,7 @@ class Config(object):
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=env.int("JWT_REFRESH_TOKEN_EXPIRES", 7))
     JWT_BLACKLIST_TOKEN_CHECKS = ["access", "refresh"]
 
+    # Pagination
     DEFAULT_OFFSET_VALUE = 0
     DEFAULT_LIMIT_VALUE = 15
     MAX_LIMIT_VALUE = 50
@@ -109,8 +110,6 @@ class ProdConfig(Config):
 
 class DevConfig(Config):
     """Development configuration."""
-
-    CACHE_TYPE = "simple"  # Can be "memcached", "redis", etc.
 
 
 MODE = os.environ.get("MODE", default="dev")
