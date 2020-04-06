@@ -1,8 +1,15 @@
+from flask import request
+from flask_babel import lazy_gettext as _
+
 from task_office.core.utils import lookup_filter
+from task_office.exceptions import InvalidUsage
+from task_office.settings import CONFIG
 
 
 class ListedResponseHelper:
-    RESPONSE_TEMPLATE = {"count": 0, "results": []}
+    error_messages = {"max_offset_exceeded": _("Max value {} exceeded")}
+    RESPONSE_TEMPLATE = {"count": None, "results": [], "next": None, "prev": None}
+    RESPONSE_PAGINATED_QS_TEMPLATE = "?limit={}&offset={}"
 
     @staticmethod
     def _get_query_ordered(query, order_param):
@@ -27,11 +34,27 @@ class ListedResponseHelper:
     def serialize(self, query, query_params, schema):
         query = self._get_query_filtered(query, query_params.get("searching", {}))
         query = self._get_query_ordered(query, query_params.get("ordering", ""))
-        query = self._get_query_paginated(
-            query, query_params.get("limit"), query_params.get("offset")
-        )
         count = query.count()
+
+        limit = query_params.get("limit", CONFIG.DEFAULT_LIMIT_VALUE)
+        offset = query_params.get("offset", CONFIG.DEFAULT_OFFSET_VALUE)
+        query = self._get_query_paginated(query, limit, offset)
+
         data = dict(self.RESPONSE_TEMPLATE)
+        if offset >= count:
+            raise InvalidUsage(
+                messages=[self.error_messages["max_offset_exceeded"].format(count - 1)],
+                status_code=422,
+                key="offset",
+            )
+        if (offset + limit) <= count:
+            data[
+                "next"
+            ] = f"{request.base_url}{self.RESPONSE_PAGINATED_QS_TEMPLATE.format(limit, offset + limit)}"
+        if (offset - limit) > 0:
+            data[
+                "prev"
+            ] = f"{request.base_url}{self.RESPONSE_PAGINATED_QS_TEMPLATE.format(limit, offset - limit)}"
         data["count"] = count
         data["results"] = schema.dump(query)
         return data

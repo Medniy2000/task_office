@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-03-28 18:08+0200\n"
+"POT-Creation-Date: 2020-04-06 08:46+0300\n"
 "PO-Revision-Date: 2020-03-28 18:05+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -84,6 +84,10 @@ msgstr "Already exists"
 msgid "Not found with value {}"
 msgstr "Not found with value {}"
 
+#: task_office/core/helpers/listed_response.py:10
+msgid "Max value {} exceeded"
+msgstr "Max value {} exceeded"
+
 #: task_office/core/models/db_models.py:76
 msgid "Owner"
 msgstr "Owner"
@@ -124,10 +128,6 @@ msgstr "Rejected"
 msgid "Done"
 msgstr "Done"
 
-#: task_office/core/schemas/base_schemas.py:54
-msgid "Max limit {} exceeded"
-msgstr "Max limit {} exceeded"
-
 #: task_office/tasks/schemas/basic_schemas.py:130
 #: task_office/tasks/schemas/basic_schemas.py:132
 #: task_office/tasks/schemas/basic_schemas.py:180
@@ -139,4 +139,7 @@ msgstr "ascending"
 #: task_office/tasks/schemas/basic_schemas.py:181
 msgid "descending"
 msgstr "descending"
+
+#~ msgid "Max limit {} exceeded"
+#~ msgstr "Max limit {} exceeded"
 

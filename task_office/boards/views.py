@@ -88,7 +88,6 @@ def update_board(board_uuid, **kwargs):
 def get_list_boards(**kwargs):
     data = kwargs
     user = get_current_user()
-
     boards = Board.query.join(Permission).filter(Permission.user_uuid == user.uuid)
     # Serialize to paginated response
     data = listed_response.serialize(

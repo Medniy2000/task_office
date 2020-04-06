@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-03-28 18:08+0200\n"
+"POT-Creation-Date: 2020-04-06 08:46+0300\n"
 "PO-Revision-Date: 2020-01-04 15:13+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru\n"
@@ -59,8 +59,8 @@ msgid "Already exists with value {}"
 msgstr "Уже сужествует из значением {}"
 
 #: task_office/columns/views.py:108 task_office/tasks/views.py:142
-msgid "Должен быть между {} и {}."
-msgstr ""
+msgid "Must be between {} and {}."
+msgstr "Должен быть между {} и {}."
 
 #: task_office/core/enums.py:43
 msgid "Ascend"
@@ -84,6 +84,10 @@ msgstr "Уже существует"
 #: task_office/core/validators.py:37
 msgid "Not found with value {}"
 msgstr "Не найдено из ззначением {}"
+
+#: task_office/core/helpers/listed_response.py:10
+msgid "Max value {} exceeded"
+msgstr "Максимальное значение {} превышен"
 
 #: task_office/core/models/db_models.py:76
 msgid "Owner"
@@ -125,10 +129,6 @@ msgstr "Отклонено"
 msgid "Done"
 msgstr "Сделано"
 
-#: task_office/core/schemas/base_schemas.py:54
-msgid "Max limit {} exceeded"
-msgstr "Максимальный лимит {} превышен"
-
 #: task_office/tasks/schemas/basic_schemas.py:130
 #: task_office/tasks/schemas/basic_schemas.py:132
 #: task_office/tasks/schemas/basic_schemas.py:180
@@ -140,4 +140,10 @@ msgstr "Увеличение"
 #: task_office/tasks/schemas/basic_schemas.py:181
 msgid "descending"
 msgstr "Уменьшение"
+
+#~ msgid "Должен быть между {} и {}."
+#~ msgstr ""
+
+#~ msgid "Max limit {} exceeded"
+#~ msgstr "Максимальный лимит {} превышен"
 
