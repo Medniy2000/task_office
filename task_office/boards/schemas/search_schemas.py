@@ -2,7 +2,7 @@ from marshmallow import fields
 
 from task_office.core.models.db_models import User
 from task_office.core.schemas.base_schemas import SearchSchema
-from task_office.settings import CONFIG
+from task_office.settings import app_config
 
 
 class SearchUserSchema(SearchSchema):
@@ -16,4 +16,4 @@ class SearchUserSchema(SearchSchema):
 
 
 search_user_schema = SearchUserSchema()
-CONFIG.API_SPEC.components.schema("SearchUserSchema", schema=SearchUserSchema)
+app_config.API_SPEC.components.schema("SearchUserSchema", schema=SearchUserSchema)

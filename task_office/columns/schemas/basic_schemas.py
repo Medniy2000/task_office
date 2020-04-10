@@ -7,7 +7,7 @@ from marshmallow_enum import EnumField
 from task_office.core.enums import XEnum, OrderingDirection
 from task_office.core.models.db_models import BoardColumn
 from task_office.core.schemas.base_schemas import BaseSchema, ListSchema, XSchema
-from task_office.settings import CONFIG
+from task_office.settings import app_config
 
 
 class ColumnPostSchema(BaseSchema):
@@ -45,9 +45,9 @@ column_post_schema = ColumnPostSchema()
 column_put_schema = ColumnPutSchema()
 column_dump_schema = ColumnDumpSchema()
 column_listed_dump_schema = ColumnDumpSchema(many=True)
-CONFIG.API_SPEC.components.schema("ColumnPostSchema", schema=ColumnPostSchema)
-CONFIG.API_SPEC.components.schema("ColumnPutSchema", schema=ColumnPutSchema)
-CONFIG.API_SPEC.components.schema("ColumnDumpSchema", schema=ColumnDumpSchema)
+app_config.API_SPEC.components.schema("ColumnPostSchema", schema=ColumnPostSchema)
+app_config.API_SPEC.components.schema("ColumnPutSchema", schema=ColumnPutSchema)
+app_config.API_SPEC.components.schema("ColumnDumpSchema", schema=ColumnDumpSchema)
 
 
 class ColumnListQuerySchema(ListSchema):
@@ -71,4 +71,6 @@ class ColumnListQuerySchema(ListSchema):
 
 
 column_list_query_schema = ColumnListQuerySchema()
-CONFIG.API_SPEC.components.schema("ColumnListQuerySchema", schema=ColumnListQuerySchema)
+app_config.API_SPEC.components.schema(
+    "ColumnListQuerySchema", schema=ColumnListQuerySchema
+)

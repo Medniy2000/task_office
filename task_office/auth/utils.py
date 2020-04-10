@@ -6,7 +6,7 @@ from flask_jwt_extended import get_current_user
 from task_office.core.models.db_models import Permission
 from task_office.exceptions import InvalidUsage
 from task_office.extensions import cache
-from task_office.settings import CONFIG
+from task_office.settings import app_config
 
 
 def _get_cached_permissions():
@@ -19,7 +19,9 @@ def _get_cached_permissions():
         if not perms:
             perms = {uuid.UUID(item.board_uuid).hex: item.role for item in user.perms}
             if perms:
-                cache.set(key, perms, timeout=CONFIG.JWT_ACCESS_TOKEN_EXPIRES.seconds)
+                cache.set(
+                    key, perms, timeout=app_config.JWT_ACCESS_TOKEN_EXPIRES.seconds
+                )
     return perms
 
 

@@ -10,7 +10,7 @@ from task_office.core.models.db_models import BoardColumn, Task, User
 from task_office.core.schemas.base_schemas import BaseSchema, ListSchema, SearchSchema
 from task_office.core.schemas.nested_schemas import NestedUserDumpSchema
 from task_office.core.validators import PKExists
-from task_office.settings import CONFIG
+from task_office.settings import app_config
 from task_office.tasks.schemas.search_schemas import SearchTaskSchema
 
 
@@ -93,9 +93,7 @@ class TaskPutSchema(BaseSchema):
 
 
 class TaskDumpSchema(BaseSchema):
-    expire_at = fields.DateTime(
-        attribute="expire_at", dump_only=True, format=CONFIG.API_DATETIME_FORMAT
-    )
+    expire_at = fields.DateTime(attribute="expire_at", dump_only=True)
     label = fields.Str(dump_only=True)
     name = fields.Str(dump_only=True)
     description = fields.Str(dump_only=True)
@@ -118,9 +116,9 @@ task_post_schema = TaskPostSchema()
 task_put_schema = TaskPutSchema()
 task_dump_schema = TaskDumpSchema()
 tasks_listed_dump_schema = TaskDumpSchema(many=True)
-CONFIG.API_SPEC.components.schema("TaskPostSchema", schema=TaskPostSchema)
-CONFIG.API_SPEC.components.schema("TaskPutSchema", schema=TaskPutSchema)
-CONFIG.API_SPEC.components.schema("TaskDumpSchema", schema=TaskDumpSchema)
+app_config.API_SPEC.components.schema("TaskPostSchema", schema=TaskPostSchema)
+app_config.API_SPEC.components.schema("TaskPutSchema", schema=TaskPutSchema)
+app_config.API_SPEC.components.schema("TaskDumpSchema", schema=TaskDumpSchema)
 
 
 class TaskListQuerySchema(ListSchema):
@@ -150,7 +148,7 @@ class TaskListQuerySchema(ListSchema):
 
 
 task_list_query_schema = TaskListQuerySchema()
-CONFIG.API_SPEC.components.schema("TaskListQuerySchema", schema=TaskListQuerySchema)
+app_config.API_SPEC.components.schema("TaskListQuerySchema", schema=TaskListQuerySchema)
 
 
 class ColumnWithTasksDumpSchema(BaseSchema):
@@ -168,7 +166,7 @@ class ColumnWithTasksDumpSchema(BaseSchema):
 
 
 columns_listed_dump_schema = ColumnWithTasksDumpSchema(many=True)
-CONFIG.API_SPEC.components.schema(
+app_config.API_SPEC.components.schema(
     "ColumnWithTasksDumpSchema", schema=ColumnWithTasksDumpSchema
 )
 
@@ -188,6 +186,6 @@ class TaskListByColumnsQuerySchema(ListSchema):
 
 
 task_list_by_columns_query_schema = TaskListByColumnsQuerySchema()
-CONFIG.API_SPEC.components.schema(
+app_config.API_SPEC.components.schema(
     "TaskListByColumnsQuerySchema", schema=TaskListByColumnsQuerySchema
 )

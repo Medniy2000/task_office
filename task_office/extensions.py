@@ -8,7 +8,7 @@ from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy, Model
 
-from task_office.settings import CONFIG
+from task_office.settings import app_config
 from task_office.utils import jwt_identity, identity_loader
 
 
@@ -55,7 +55,7 @@ jwt.user_identity_loader(identity_loader)
 # Babel
 # https://pythonhosted.org/Flask-Babel/
 # ------------------------------------------------------------------------------
-babel = Babel(default_locale=CONFIG.LOCALE, default_timezone=CONFIG.TIME_ZONE)
+babel = Babel(default_locale=app_config.LOCALE, default_timezone=app_config.TIME_ZONE)
 
 
 @babel.localeselector
@@ -64,7 +64,7 @@ def get_locale():
     user = getattr(g, "user", None)
     if user is not None:
         return user.locale
-    return request.accept_languages.best_match(list(CONFIG.LANGUAGES.keys()))
+    return request.accept_languages.best_match(list(app_config.LANGUAGES.keys()))
 
 
 @babel.timezoneselector

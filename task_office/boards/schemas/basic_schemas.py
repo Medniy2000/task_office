@@ -7,7 +7,7 @@ from marshmallow_enum import EnumField
 from task_office.boards.schemas.search_schemas import SearchUserSchema
 from task_office.core.enums import XEnum
 from task_office.core.schemas.base_schemas import BaseSchema, ListSchema, XSchema
-from task_office.settings import CONFIG
+from task_office.settings import app_config
 
 
 class BoardActionsSchema(BaseSchema):
@@ -35,8 +35,8 @@ class BoardDumpSchema(BaseSchema):
 board_action_schema = BoardActionsSchema()
 board_dump_schema = BoardDumpSchema()
 board_list_dump_schema = BoardDumpSchema(many=True)
-CONFIG.API_SPEC.components.schema("BoardActionsSchema", schema=BoardActionsSchema)
-CONFIG.API_SPEC.components.schema("BoardDumpSchema", schema=BoardDumpSchema)
+app_config.API_SPEC.components.schema("BoardActionsSchema", schema=BoardActionsSchema)
+app_config.API_SPEC.components.schema("BoardDumpSchema", schema=BoardDumpSchema)
 
 
 class BoardListQuerySchema(ListSchema):
@@ -51,7 +51,9 @@ class BoardListQuerySchema(ListSchema):
 
 
 board_list_query_schema = BoardListQuerySchema()
-CONFIG.API_SPEC.components.schema("BoardListQuerySchema", schema=BoardListQuerySchema)
+app_config.API_SPEC.components.schema(
+    "BoardListQuerySchema", schema=BoardListQuerySchema
+)
 
 
 class UserListByBoardQuerySchema(ListSchema):
@@ -68,6 +70,6 @@ class UserListByBoardQuerySchema(ListSchema):
 
 
 user_list_by_board_query_schema = UserListByBoardQuerySchema()
-CONFIG.API_SPEC.components.schema(
+app_config.API_SPEC.components.schema(
     "UserListByBoardQuerySchema", schema=UserListByBoardQuerySchema
 )

@@ -5,7 +5,7 @@ from marshmallow import Schema, fields, post_dump, post_load
 from marshmallow.validate import Range
 
 from task_office.exceptions import InvalidUsage
-from task_office.settings import CONFIG
+from task_office.settings import app_config
 
 
 class XSchema(Schema):
@@ -35,12 +35,8 @@ class XSchema(Schema):
 
 
 class BaseSchema(XSchema):
-    created_at = fields.DateTime(
-        attribute="created_at", dump_only=True, format=CONFIG.API_DATETIME_FORMAT
-    )
-    updated_at = fields.DateTime(
-        attribute="updated_at", dump_only=True, format=CONFIG.API_DATETIME_FORMAT
-    )
+    created_at = fields.DateTime(attribute="created_at", dump_only=True)
+    updated_at = fields.DateTime(attribute="updated_at", dump_only=True)
     uuid = fields.UUID(dump_only=True)
 
     @post_dump
@@ -52,12 +48,12 @@ class BaseSchema(XSchema):
 class ListSchema(XSchema):
 
     limit = fields.Integer(
-        default=CONFIG.DEFAULT_LIMIT_VALUE,
+        default=app_config.DEFAULT_LIMIT_VALUE,
         required=False,
-        validate=[Range(min=1, max=CONFIG.MAX_LIMIT_VALUE)],
+        validate=[Range(min=1, max=app_config.MAX_LIMIT_VALUE)],
     )
     offset = fields.Integer(
-        default=CONFIG.DEFAULT_OFFSET_VALUE, required=False, validate=[Range(min=0)]
+        default=app_config.DEFAULT_OFFSET_VALUE, required=False, validate=[Range(min=0)]
     )
 
 

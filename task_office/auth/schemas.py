@@ -5,7 +5,7 @@ from marshmallow.validate import Length
 from task_office.core.models.db_models import User
 from task_office.core.schemas.base_schemas import BaseSchema, XSchema
 from task_office.core.validators import Unique
-from task_office.settings import CONFIG
+from task_office.settings import app_config
 
 
 class UserSchema(BaseSchema):
@@ -104,12 +104,12 @@ refreshed_access_tokens_schema = RefreshedAccessTokenSchema()
 token_schema = TokenSchema()
 
 
-CONFIG.API_SPEC.components.schema("UserSchema", schema=UserSchema)
-CONFIG.API_SPEC.components.schema("UserSignInSchema", schema=UserSignInSchema)
-CONFIG.API_SPEC.components.schema("UserSignUpSchema", schema=UserSignUpSchema)
-CONFIG.API_SPEC.components.schema("TokenSchema", schema=TokenSchema)
-CONFIG.API_SPEC.components.schema("SignedTokensSchema", schema=SignedTokensSchema)
-CONFIG.API_SPEC.components.schema(
+app_config.API_SPEC.components.schema("UserSchema", schema=UserSchema)
+app_config.API_SPEC.components.schema("UserSignInSchema", schema=UserSignInSchema)
+app_config.API_SPEC.components.schema("UserSignUpSchema", schema=UserSignUpSchema)
+app_config.API_SPEC.components.schema("TokenSchema", schema=TokenSchema)
+app_config.API_SPEC.components.schema("SignedTokensSchema", schema=SignedTokensSchema)
+app_config.API_SPEC.components.schema(
     "RefreshedAccessTokenSchema", schema=RefreshedAccessTokenSchema
 )
-CONFIG.API_SPEC.components.schema("SignedSchema", schema=SignedSchema)
+app_config.API_SPEC.components.schema("SignedSchema", schema=SignedSchema)

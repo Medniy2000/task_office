@@ -13,21 +13,28 @@ env = Env()
 class Config(object):
     """Base configuration."""
 
-    # Project dirs
+    # PROJECT DIRS
     APP_DIR = os.path.abspath(os.path.dirname(__file__))
     PROJECT_ROOT = os.path.abspath(os.path.join(APP_DIR, os.pardir))
 
-    # Environment variables setting
     READ_DOT_ENV_FILE = env.bool("FLASK_READ_DOT_ENV_FILE", default=False)
     if READ_DOT_ENV_FILE:
         # OS environment variables take precedence over variables from .env
         env.read_env(os.path.join(PROJECT_ROOT, ".env"))
 
-    PROJECT_NAME = env.str("PROJECT_NAME", "Task Office")
-    SECRET_KEY = env.str("FLASK_SECRET", "secret-key")
+    # GENERAL
+    PROJECT_NAME = env.str("PROJECT_NAME", "NoName")
+    SECRET_KEY = env.str("FLASK_SECRET", "NoKey")
+    FLASK_DEBUG = env.int("FLASK_DEBUG", 0)
+    TIME_ZONE = "UTC"
 
+    LANGUAGES = {"ru": "Russian", "en": "English", "uk": "Ukrainian"}
+    LOCALE = "en"
+    # https://pythonhosted.org/Flask-Babel/
+    BABEL_TRANSLATION_DIRECTORIES = os.path.join(PROJECT_ROOT, "translations")
+
+    # API
     API_V1_PREFIX = "/api/v1/"
-    API_DATETIME_FORMAT = "%Y-%m-%d %I:%M:%S"
     USE_DOCS = env.bool("USE_DOCS", False)
 
     API_SPEC = APISpec(
@@ -38,21 +45,16 @@ class Config(object):
         plugins=[FlaskPlugin(), MarshmallowPlugin()],
     )
 
-    FLASK_DEBUG = env.int("FLASK_DEBUG", 0)
-    DEBUG_TB_INTERCEPT_REDIRECTS = False
-
-    TIME_ZONE = "UTC"
-    LANGUAGES = {"ru": "Russian", "en": "English", "uk": "Ukrainian"}
-    LOCALE = "en"
-
-    # https://pythonhosted.org/Flask-Babel/
-    BABEL_TRANSLATION_DIRECTORIES = os.path.join(PROJECT_ROOT, "translations")
-
-    # Static settings
-    STATIC_DIR = os.path.abspath(os.path.join(PROJECT_ROOT, "static"))
-    STATIC_URL = API_V1_PREFIX + "/static"
+    # API PAGINATION
+    DEFAULT_OFFSET_VALUE = 0
+    DEFAULT_LIMIT_VALUE = 15
+    MAX_LIMIT_VALUE = 50
 
     CORS_ORIGIN_WHITELIST = env.list("CORS_ORIGIN_WHITELIST", [])
+
+    # STATIC DIRS
+    STATIC_DIR = os.path.abspath(os.path.join(PROJECT_ROOT, "static"))
+    STATIC_URL = API_V1_PREFIX + "/static"
 
     # JWT
     JWT_AUTH_USERNAME_KEY = "uuid"
@@ -62,11 +64,6 @@ class Config(object):
     )
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=env.int("JWT_REFRESH_TOKEN_EXPIRES", 7))
     JWT_BLACKLIST_TOKEN_CHECKS = ["access", "refresh"]
-
-    # Pagination
-    DEFAULT_OFFSET_VALUE = 0
-    DEFAULT_LIMIT_VALUE = 15
-    MAX_LIMIT_VALUE = 50
 
     # DB
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -114,6 +111,6 @@ class DevConfig(Config):
 
 MODE = os.environ.get("MODE", default="dev")
 
-configurations = {"dev": DevConfig, "prod": ProdConfig}
+CONFIG_SETS = {"dev": DevConfig, "prod": ProdConfig}
 
-CONFIG = configurations.get(MODE)
+app_config = CONFIG_SETS.get(MODE)

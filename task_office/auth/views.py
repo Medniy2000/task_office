@@ -18,9 +18,9 @@ from .schemas import (
     refreshed_access_tokens_schema,
 )
 from ..core.models.db_models import User
-from ..settings import CONFIG
+from ..settings import app_config
 
-blueprint = Blueprint("auth", __name__, url_prefix=CONFIG.API_V1_PREFIX + "auth")
+blueprint = Blueprint("auth", __name__, url_prefix=app_config.API_V1_PREFIX + "auth")
 
 
 @blueprint.route("/sign-up", methods=("post",))
@@ -48,9 +48,11 @@ def sign_in(**kwargs):
     """
     data = kwargs
     refresh_lf = datetime.timestamp(
-        datetime.utcnow() + CONFIG.JWT_REFRESH_TOKEN_EXPIRES
+        datetime.utcnow() + app_config.JWT_REFRESH_TOKEN_EXPIRES
     )
-    access_lf = datetime.timestamp(datetime.utcnow() + CONFIG.JWT_ACCESS_TOKEN_EXPIRES)
+    access_lf = datetime.timestamp(
+        datetime.utcnow() + app_config.JWT_ACCESS_TOKEN_EXPIRES
+    )
     return {
         "user": data["user"],
         "tokens": {
@@ -62,8 +64,8 @@ def sign_in(**kwargs):
                 "lifetime": refresh_lf,
                 "token": create_refresh_token(identity=data["user"]),
             },
-            "header_type": CONFIG.JWT_AUTH_HEADER_PREFIX,
-            "time_zone_info": CONFIG.TIME_ZONE,
+            "header_type": app_config.JWT_AUTH_HEADER_PREFIX,
+            "time_zone_info": app_config.TIME_ZONE,
         },
     }
 
@@ -77,11 +79,13 @@ def refresh(**kwargs):
     :return:
     """
     current_user = User.get_by_id(get_jwt_identity())
-    access_lf = datetime.timestamp(datetime.utcnow() + CONFIG.JWT_ACCESS_TOKEN_EXPIRES)
+    access_lf = datetime.timestamp(
+        datetime.utcnow() + app_config.JWT_ACCESS_TOKEN_EXPIRES
+    )
     return {
         "access": {
             "lifetime": access_lf,
             "token": create_access_token(identity=current_user, fresh=True),
         },
-        "time_zone_info": CONFIG.TIME_ZONE,
+        "time_zone_info": app_config.TIME_ZONE,
     }

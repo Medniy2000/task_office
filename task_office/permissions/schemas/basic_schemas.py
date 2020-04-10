@@ -9,7 +9,7 @@ from task_office.core.models.db_models import Permission
 from task_office.core.schemas.base_schemas import BaseSchema, ListSchema, XSchema
 from task_office.core.schemas.nested_schemas import NestedUserDumpSchema
 from task_office.core.validators import PKExists
-from ...settings import CONFIG
+from ...settings import app_config
 
 
 class PermissionQuerySchema(BaseSchema):
@@ -45,8 +45,12 @@ class PermissionDumpSchema(BaseSchema):
 permission_query_schema = PermissionQuerySchema()
 permission_dump_schema = PermissionDumpSchema()
 permission_list_dump_schema = PermissionDumpSchema(many=True)
-CONFIG.API_SPEC.components.schema("PermissionQuerySchema", schema=PermissionQuerySchema)
-CONFIG.API_SPEC.components.schema("PermissionDumpSchema", schema=PermissionDumpSchema)
+app_config.API_SPEC.components.schema(
+    "PermissionQuerySchema", schema=PermissionQuerySchema
+)
+app_config.API_SPEC.components.schema(
+    "PermissionDumpSchema", schema=PermissionDumpSchema
+)
 
 
 class PermissionListQuerySchema(ListSchema):
@@ -70,6 +74,6 @@ class PermissionListQuerySchema(ListSchema):
 
 
 permissions_list_query_schema = PermissionListQuerySchema()
-CONFIG.API_SPEC.components.schema(
+app_config.API_SPEC.components.schema(
     "PermissionListQuerySchema", schema=PermissionListQuerySchema
 )

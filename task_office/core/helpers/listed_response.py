@@ -3,7 +3,7 @@ from flask_babel import lazy_gettext as _
 
 from task_office.core.utils import lookup_filter
 from task_office.exceptions import InvalidUsage
-from task_office.settings import CONFIG
+from task_office.settings import app_config
 
 
 class ListedResponseHelper:
@@ -36,8 +36,8 @@ class ListedResponseHelper:
         query = self._get_query_ordered(query, query_params.get("ordering", ""))
         count = query.count()
 
-        limit = query_params.get("limit", CONFIG.DEFAULT_LIMIT_VALUE)
-        offset = query_params.get("offset", CONFIG.DEFAULT_OFFSET_VALUE)
+        limit = query_params.get("limit", app_config.DEFAULT_LIMIT_VALUE)
+        offset = query_params.get("offset", app_config.DEFAULT_OFFSET_VALUE)
         query = self._get_query_paginated(query, limit, offset)
 
         data = dict(self.RESPONSE_TEMPLATE)
