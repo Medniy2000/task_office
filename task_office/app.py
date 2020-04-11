@@ -52,16 +52,16 @@ def register_extensions(app):
 def register_blueprints(app):
     """Register Flask blueprints."""
     origins = app.config.get("CORS_ORIGIN_WHITELIST", "*")
-    cors.init_app(auth.views.blueprint, origins=origins)
-    app.register_blueprint(auth.views.blueprint)
-    app.register_blueprint(boards.views.blueprint)
-    app.register_blueprint(permissions.views.blueprint)
-    app.register_blueprint(columns.views.blueprint)
-    app.register_blueprint(tasks.views.blueprint)
-    app.register_blueprint(core.views.blueprint)
+    cors.init_app(auth.views.bp, origins=origins)
+    app.register_blueprint(auth.views.bp)
+    app.register_blueprint(boards.views.bp)
+    app.register_blueprint(permissions.views.bp)
+    app.register_blueprint(columns.views.bp)
+    app.register_blueprint(tasks.views.bp)
+    app.register_blueprint(core.views.bp)
     if app_config.USE_DOCS:
-        app.register_blueprint(swagger.views.blueprint_swagger, url_prefix=SWAGGER_URL)
-        app.register_blueprint(swagger.views.blueprint)
+        app.register_blueprint(swagger.views.bp_swagger, url_prefix=SWAGGER_URL)
+        app.register_blueprint(swagger.views.bp)
 
 
 def register_error_handlers(app):

@@ -1,7 +1,6 @@
 """User views."""
 from datetime import datetime
 
-from flask import Blueprint
 from flask_apispec import use_kwargs, marshal_with
 from flask_jwt_extended import (
     create_access_token,
@@ -17,13 +16,14 @@ from .schemas import (
     signed_schema,
     refreshed_access_tokens_schema,
 )
+from ..api.v1.views import bp
 from ..core.models.db_models import User
 from ..settings import app_config
 
-blueprint = Blueprint("auth", __name__, url_prefix=app_config.API_V1_PREFIX + "auth")
+APP_PREFIX = "/auth"
 
 
-@blueprint.route("/sign-up", methods=("post",))
+@bp.route(APP_PREFIX + "/sign-up", methods=("post",))
 @use_kwargs(user_signup_schema)
 @marshal_with(user_schema)
 def sign_up(**kwargs):
@@ -38,7 +38,7 @@ def sign_up(**kwargs):
     return user
 
 
-@blueprint.route("/sign-in", methods=("post",))
+@bp.route(APP_PREFIX + "/sign-in", methods=("post",))
 @use_kwargs(user_signin_schema)
 @marshal_with(signed_schema)
 def sign_in(**kwargs):
@@ -70,7 +70,7 @@ def sign_in(**kwargs):
     }
 
 
-@blueprint.route("/refresh", methods=("post",))
+@bp.route(APP_PREFIX + "/refresh", methods=("post",))
 @jwt_refresh_token_required
 @marshal_with(refreshed_access_tokens_schema)
 def refresh(**kwargs):

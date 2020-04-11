@@ -1,12 +1,11 @@
 """Boards views."""
 from datetime import datetime
 
-from flask import Blueprint
 from flask_apispec import use_kwargs, marshal_with
 from flask_jwt_extended import jwt_required, get_current_user
 from sqlalchemy.orm import aliased
 
-from .constants import BOARDS_PREFIX
+from .constants import APP_PREFIX, APP_PREFIX_RETRIEVE
 from .schemas.basic_schemas import (
     board_action_schema,
     board_list_query_schema,
@@ -14,6 +13,7 @@ from .schemas.basic_schemas import (
     board_dump_schema,
     user_list_by_board_query_schema,
 )
+from ..api.v1.views import bp
 from ..auth.utils import permission, reset_permissions_for_board_staff
 from ..core.helpers.listed_response import listed_response
 from ..core.models.db_models import Board, Permission, User
@@ -24,10 +24,8 @@ from ..core.utils import (
     non_empty_query_required,
 )
 
-blueprint = Blueprint("boards", __name__, url_prefix=BOARDS_PREFIX)
 
-
-@blueprint.route("", methods=("post",))
+@bp.route(APP_PREFIX, methods=("post",))
 @jwt_required
 @use_kwargs(board_action_schema)
 @marshal_with(board_dump_schema)
@@ -55,7 +53,7 @@ def create_boards(**kwargs):
     return board
 
 
-@blueprint.route("/<board_uuid>", methods=("put",))
+@bp.route(APP_PREFIX_RETRIEVE, methods=("put",))
 @jwt_required
 @use_kwargs(board_action_schema)
 @marshal_with(board_dump_schema)
@@ -82,7 +80,7 @@ def update_board(board_uuid, **kwargs):
     return board
 
 
-@blueprint.route("", methods=("get",))
+@bp.route(APP_PREFIX, methods=("get",))
 @jwt_required
 @use_kwargs(board_list_query_schema)
 def get_list_boards(**kwargs):
@@ -96,7 +94,7 @@ def get_list_boards(**kwargs):
     return data
 
 
-@blueprint.route("/<board_uuid>", methods=("get",))
+@bp.route(APP_PREFIX_RETRIEVE, methods=("get",))
 @jwt_required
 @marshal_with(board_dump_schema)
 @permission(required_role=Permission.Role.STAFF.value)
@@ -107,7 +105,7 @@ def get_board(board_uuid):
     return board
 
 
-@blueprint.route("/<board_uuid>/users", methods=("get",))
+@bp.route(APP_PREFIX_RETRIEVE + "/users", methods=("get",))
 @jwt_required
 @use_kwargs(user_list_by_board_query_schema)
 @permission(required_role=Permission.Role.STAFF.value)

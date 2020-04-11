@@ -1,13 +1,12 @@
 """Columns views."""
 from datetime import datetime
 
-from flask import Blueprint
 from flask_apispec import use_kwargs, marshal_with
 from flask_babel import lazy_gettext as _
 from flask_jwt_extended import jwt_required
 from sqlalchemy import func
 
-from .constants import COLUMNS_PREFIX
+from .constants import APP_PREFIX, APP_PREFIX_RETRIEVE
 from .schemas.basic_schemas import (
     column_post_schema,
     column_list_query_schema,
@@ -16,18 +15,17 @@ from .schemas.basic_schemas import (
     column_put_schema,
 )
 from .utils import reset_columns_ordering
+from ..api.v1.views import bp
 from ..core.helpers.listed_response import listed_response
 from ..core.models.db_models import BoardColumn, Board
 from ..core.utils import validate_request_url_uuid, non_empty_query_required
 from ..exceptions import InvalidUsage
 from ..extensions import db
 
-blueprint = Blueprint("columns", __name__, url_prefix=COLUMNS_PREFIX)
 
-
-@blueprint.route("/meta", methods=("get",))
+@bp.route(APP_PREFIX + "/meta", methods=("get",))
 @jwt_required
-def get_meta_data(board_uuid):
+def get_columns_meta_data(board_uuid):
     """
     Additional data for Columns
     """
@@ -36,7 +34,7 @@ def get_meta_data(board_uuid):
     return data
 
 
-@blueprint.route("", methods=("post",))
+@bp.route(APP_PREFIX, methods=("post",))
 @jwt_required
 @use_kwargs(column_post_schema)
 @marshal_with(column_dump_schema)
@@ -81,7 +79,7 @@ def create_column(board_uuid, **kwargs):
     return column
 
 
-@blueprint.route("/<column_uuid>", methods=("put",))
+@bp.route(APP_PREFIX_RETRIEVE, methods=("put",))
 @jwt_required
 @use_kwargs(column_put_schema)
 @marshal_with(column_dump_schema)
@@ -137,7 +135,7 @@ def update_column(board_uuid, column_uuid, **kwargs):
     return column
 
 
-@blueprint.route("", methods=("get",))
+@bp.route(APP_PREFIX, methods=("get",))
 @jwt_required
 @use_kwargs(column_list_query_schema)
 def get_list_columns(board_uuid, **kwargs):

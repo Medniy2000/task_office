@@ -1,4 +1,4 @@
-from task_office.boards.constants import BOARD_RETRIEVE_URL
+from task_office.boards.constants import APP_PREFIX_RETRIEVE as BOARD_PREFIX_RETRIEVE
 
-TASKS_PREFIX = BOARD_RETRIEVE_URL + "/tasks"
-TASKS_RETRIEVE_URL = TASKS_PREFIX + "/<task_uuid>"
+APP_PREFIX = BOARD_PREFIX_RETRIEVE + "/tasks"
+APP_PREFIX_RETRIEVE = APP_PREFIX + "/<task_uuid>"

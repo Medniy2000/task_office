@@ -1,4 +1,4 @@
-from task_office.boards.constants import BOARD_RETRIEVE_URL
+from task_office.boards.constants import APP_PREFIX_RETRIEVE as BOARD_PREFIX_RETRIEVE
 
-COLUMNS_PREFIX = BOARD_RETRIEVE_URL + "/columns"
-COLUMNS_RETRIEVE_URL = COLUMNS_PREFIX + "/<column_uuid>"
+APP_PREFIX = BOARD_PREFIX_RETRIEVE + "/columns"
+APP_PREFIX_RETRIEVE = APP_PREFIX + "/<column_uuid>"

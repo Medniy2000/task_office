@@ -2,33 +2,29 @@
 import uuid
 from datetime import datetime
 
-from flask import Blueprint
 from flask_apispec import use_kwargs, marshal_with
 from flask_babel import lazy_gettext as _
 from flask_jwt_extended import jwt_required
 
-from task_office.boards.constants import BOARD_RETRIEVE_URL
+from .constants import APP_PREFIX, APP_PREFIX_RETRIEVE
 from .schemas.basic_schemas import (
     permission_query_schema,
     permission_dump_schema,
     permissions_list_query_schema,
     permission_list_dump_schema,
 )
+from ..api.v1.views import bp
 from ..auth.utils import permission, reset_permissions
 from ..core.helpers.listed_response import listed_response
 from ..core.models.db_models import Permission, Board
 from ..core.utils import is_uuid, non_empty_query_required, empty_query_required
 from ..exceptions import InvalidUsage
 
-blueprint = Blueprint(
-    "permissions", __name__, url_prefix=BOARD_RETRIEVE_URL + "/permissions"
-)
 
-
-@blueprint.route("/meta", methods=("get",))
+@bp.route(APP_PREFIX + "/meta", methods=("get",))
 @jwt_required
 @permission(required_role=Permission.Role.EDITOR.value)
-def get_meta_data(board_uuid):
+def get_permissions_meta_data(board_uuid):
     """
     Additional data for Permissions
     """
@@ -41,7 +37,7 @@ def get_meta_data(board_uuid):
     return data
 
 
-@blueprint.route("", methods=("post",))
+@bp.route(APP_PREFIX, methods=("post",))
 @jwt_required
 @use_kwargs(permission_query_schema)
 @marshal_with(permission_dump_schema)
@@ -74,7 +70,7 @@ def create_permission(board_uuid, **kwargs):
     return perm
 
 
-@blueprint.route("/<permission_uuid>", methods=("put",))
+@bp.route(APP_PREFIX_RETRIEVE, methods=("put",))
 @jwt_required
 @use_kwargs(permission_query_schema)
 @marshal_with(permission_dump_schema)
@@ -108,7 +104,7 @@ def update_permission(board_uuid, permission_uuid, **kwargs):
     return perm
 
 
-@blueprint.route("", methods=("get",))
+@bp.route(APP_PREFIX, methods=("get",))
 @jwt_required
 @use_kwargs(permissions_list_query_schema)
 @permission(required_role=Permission.Role.STAFF.value)
@@ -132,7 +128,7 @@ def get_list_permission(board_uuid, **kwargs):
     return data
 
 
-@blueprint.route("/<permission_uuid>", methods=("get",))
+@bp.route(APP_PREFIX_RETRIEVE, methods=("get",))
 @jwt_required
 @marshal_with(permission_dump_schema)
 @permission(required_role=Permission.Role.STAFF.value)
