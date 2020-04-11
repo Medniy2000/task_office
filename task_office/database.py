@@ -2,7 +2,7 @@
 
 from sqlalchemy.orm import relationship
 
-from .extensions import db
+from .extensions.db import db
 
 # Alias common SQLAlchemy names
 Column = db.Column

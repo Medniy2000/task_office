@@ -5,7 +5,7 @@ from sqlalchemy import JSON
 from sqlalchemy.dialects.postgresql import UUID
 
 from task_office.compat import basestring
-from task_office.extensions import db
+from task_office.extensions.db import db
 
 
 class PKMixin(object):
@@ -22,15 +22,15 @@ class PKMixin(object):
     meta = db.Column(JSON, default=dict)
 
     @classmethod
-    def get_by_id(cls, record_id):
+    def get_by_id(cls, item_id):
         """Get record by ID."""
         if any(
             (
-                isinstance(record_id, basestring) and record_id.isdigit(),
-                isinstance(record_id, (int, float)),
+                isinstance(item_id, basestring) and item_id.isdigit(),
+                isinstance(item_id, (int, float)),
             )
         ):
-            return cls.query.filter_by(id=record_id).first()
+            return cls.query.filter_by(id=item_id).first()
 
     def hexed_uuid(self):
         return uuid.UUID(str(self.uuid)).hex

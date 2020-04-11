@@ -1,19 +1,16 @@
 """The app module, containing the app factory function."""
 from flask import Flask
 
-from task_office import (
-    commands,
-    auth,
-    swagger,
-    boards,
-    permissions,
-    columns,
-    tasks,
-    core,
-)
+from task_office import commands, swagger, core
+from task_office.api import v1 as api_v1
 from task_office.auth.jwt_error_handlers import jwt_errors_map
 from task_office.exceptions import InvalidUsage
-from task_office.extensions import bcrypt, cache, db, migrate, cors, jwt, babel
+from task_office.extensions.babel import babel
+from task_office.extensions.bcrypt import bcrypt
+from task_office.extensions.cors import init_cors
+from task_office.extensions.db import db
+from task_office.extensions.jwt import init_jwt
+from task_office.extensions.migrate import init_migrate
 from task_office.settings import app_config
 from task_office.swagger import SWAGGER_URL
 
@@ -41,24 +38,22 @@ def create_app(config_object):
 
 def register_extensions(app):
     """Register Flask extensions."""
-    bcrypt.init_app(app)
-    cache.init_app(app, config=app_config.CACHE)
     db.init_app(app)
-    jwt.init_app(app)
-    migrate.init_app(app, db)
     babel.init_app(app)
+    bcrypt.init_app(app)
+
+    init_jwt(app)
+    init_migrate(app, db)
+    init_cors(app)
 
 
 def register_blueprints(app):
     """Register Flask blueprints."""
-    origins = app.config.get("CORS_ORIGIN_WHITELIST", "*")
-    cors.init_app(auth.views.bp, origins=origins)
-    app.register_blueprint(auth.views.bp)
-    app.register_blueprint(boards.views.bp)
-    app.register_blueprint(permissions.views.bp)
-    app.register_blueprint(columns.views.bp)
-    app.register_blueprint(tasks.views.bp)
+    app.register_blueprint(api_v1.views.bp)
+
+    # root endpoint
     app.register_blueprint(core.views.bp)
+
     if app_config.USE_DOCS:
         app.register_blueprint(swagger.views.bp_swagger, url_prefix=SWAGGER_URL)
         app.register_blueprint(swagger.views.bp)

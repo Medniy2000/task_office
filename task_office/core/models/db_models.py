@@ -5,7 +5,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from task_office.core.enums import XEnum
 from task_office.core.models.mixins import DTMixin, PKMixin
 from task_office.database import Column, Model, db, reference_col, relationship
-from task_office.extensions import bcrypt
+from task_office.extensions.bcrypt import bcrypt
 
 
 class User(PKMixin, DTMixin, Model):
