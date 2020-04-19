@@ -1,7 +1,14 @@
 -r ./base.txt
 
+# API docs
 flask-swagger-ui==3.20.9
 apispec>=1.0.0
 apispec-webframeworks
 flask_apispec
 pyyaml
+
+# Tests
+pytest
+factory-boy
+WebTest
+Faker

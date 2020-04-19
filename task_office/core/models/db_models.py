@@ -147,7 +147,7 @@ class Task(PKMixin, DTMixin, Model):
     creator_uuid = reference_col("users", pk_name="uuid", nullable=False)
     creator = relationship("User", backref=db.backref("tasks"))
 
-    performers = db.relationship(
+    performers = relationship(
         "User",
         secondary=users_tasks,
         lazy="subquery",
