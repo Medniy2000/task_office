@@ -8,7 +8,8 @@ flask_apispec
 pyyaml
 
 # Tests
-pytest
+pytest>=5.4.0
+pytest-mock>=3.1.0
 factory-boy
 WebTest
 Faker

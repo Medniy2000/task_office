@@ -4,7 +4,6 @@ from webtest import TestApp
 from task_office.app import create_app
 from task_office.extensions.db import db as _db
 from task_office.settings import app_config
-from .factories import UserFactory
 
 
 @pytest.yield_fixture(scope="function")
@@ -43,14 +42,7 @@ def db(app):
     _db.drop_all()
 
 
-@pytest.fixture
-def user(db):
-    """A user for the tests."""
-
-    class User:
-        def get(self):
-            user = UserFactory()
-            db.session.commit()
-            return user
-
-    return User()
+pytest_plugins = [
+    "tests.fixtures.model_fixtures",
+    "tests.unit.app.core.fixtures",
+]
