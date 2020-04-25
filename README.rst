@@ -63,4 +63,5 @@ Translations commands::
 
 Run tests::
 
-    pytest --cov=task_office tests/
+    pytest -s -v --cov=task_office tests/
+

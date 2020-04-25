@@ -3,23 +3,6 @@ import pytest
 from tests.factories import UserFactory, BoardFactory
 
 
-@pytest.fixture
-def session_users():
-    """A users for the tests."""
-    users = UserFactory.create_batch(3)
-
-    class User:
-        @staticmethod
-        def get_single():
-            return users[0]
-
-        @staticmethod
-        def get_list():
-            return users
-
-    return User()
-
-
 @pytest.fixture(scope="function")
 def function_users(db):
     """A users for the tests."""

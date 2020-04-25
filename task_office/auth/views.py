@@ -9,6 +9,7 @@ from flask_jwt_extended import (
     get_jwt_identity,
 )
 
+from .constants import APP_PREFIX
 from .schemas import (
     user_schema,
     user_signup_schema,
@@ -19,8 +20,6 @@ from .schemas import (
 from ..api.v1.views import bp
 from ..core.models.db_models import User
 from ..settings import app_config
-
-APP_PREFIX = "/auth"
 
 
 @bp.route(APP_PREFIX + "/sign-up", methods=("post",))

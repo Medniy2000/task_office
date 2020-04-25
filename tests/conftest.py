@@ -45,4 +45,5 @@ def db(app):
 pytest_plugins = [
     "tests.fixtures.model_fixtures",
     "tests.unit.app.core.fixtures",
+    "tests.integration.app.auth.fixtures",
 ]
