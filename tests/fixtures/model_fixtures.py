@@ -4,7 +4,7 @@ from tests.factories import UserFactory, BoardFactory
 
 
 @pytest.fixture(scope="function")
-def function_users(db):
+def func_users(db):
     """A users for the tests."""
     users = UserFactory.create_batch(3)
     db.session.commit()
@@ -22,7 +22,7 @@ def function_users(db):
 
 
 @pytest.fixture
-def session_boards(session_users):
+def ses_boards(session_users):
     """A boards for the tests."""
     user = session_users.get_single()
     boards = BoardFactory.create_batch(3)
@@ -43,9 +43,9 @@ def session_boards(session_users):
 
 
 @pytest.fixture(scope="function")
-def function_boards(function_users, db):
+def func_boards(func_users, db):
     """A boards for the tests."""
-    user = function_users.get_single()
+    user = func_users.get_single()
     boards = BoardFactory.create_batch(5, owner_uuid=str(user.uuid))
     db.session.commit()
 

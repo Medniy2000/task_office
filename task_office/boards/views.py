@@ -29,7 +29,7 @@ from ..core.utils import (
 @jwt_required
 @use_kwargs(board_action_schema)
 @marshal_with(board_dump_schema)
-def create_boards(**kwargs):
+def create_board(**kwargs):
     data = kwargs
 
     # validate current user
