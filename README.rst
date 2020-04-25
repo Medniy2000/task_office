@@ -61,3 +61,6 @@ Translations commands::
     pybabel compile -d translations
 
 
+Run tests::
+
+    pytest --cov=task_office tests/
