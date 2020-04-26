@@ -15,6 +15,12 @@ from task_office.extensions.migrate import init_migrate
 from task_office.settings import app_config
 from task_office.swagger import SWAGGER_URL
 
+from task_office.tasks import views
+from task_office.permissions import views
+from task_office.boards import views
+from task_office.columns import views
+from task_office.auth import views
+
 
 def create_app(config_object):
     """An application factory, as explained here:
