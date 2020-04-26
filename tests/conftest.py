@@ -1,9 +1,11 @@
 import pytest
+from flask import url_for
 from webtest import TestApp
 
 from task_office.app import create_app
 from task_office.extensions.db import db as _db
 from task_office.settings import app_config
+from tests.factories import USER_FACTORY_DEFAULT_PASSWORD
 
 
 @pytest.yield_fixture(scope="function")
@@ -42,8 +44,21 @@ def db(app):
     _db.drop_all()
 
 
+@pytest.fixture(scope="function")
+def auth_user(func_users, testapp):
+    sign_in_url = url_for("api_v1.sign_in")
+    user = func_users.get_single()
+    data = {
+        "email": user.email,
+        "password": USER_FACTORY_DEFAULT_PASSWORD,
+    }
+    resp = testapp.post_json(sign_in_url, data, status=200)
+    return {"current_user": user, "auth_data": resp.json}
+
+
 pytest_plugins = [
     "tests.fixtures.model_fixtures",
     "tests.unit.app.core.fixtures",
     "tests.integration.app.auth.fixtures",
+    "tests.integration.app.boards.fixtures",
 ]

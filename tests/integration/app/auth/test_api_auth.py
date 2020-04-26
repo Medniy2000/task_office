@@ -5,14 +5,14 @@ from flask import url_for
 from tests.factories import USER_FACTORY_DEFAULT_PASSWORD
 
 
-def test_sign_up_success(testapp, valid_sign_up_users_valid_data):
+def test_sign_up_success(testapp, sign_up_users_valid_data):
     url = url_for("api_v1.sign_up")
-    testapp.post_json(url, valid_sign_up_users_valid_data, status=200)
+    testapp.post_json(url, sign_up_users_valid_data, status=200)
 
 
-def test_sign_up_failed(testapp, valid_sign_up_users_invalid_data):
+def test_sign_up_failed(testapp, sign_up_users_invalid_data):
     url = url_for("api_v1.sign_up")
-    testapp.post_json(url, valid_sign_up_users_invalid_data, status=422)
+    testapp.post_json(url, sign_up_users_invalid_data, status=422)
 
 
 def test_sign_up_already_exists_username(testapp, func_users):
@@ -43,16 +43,16 @@ def test_sign_up_already_exists_email(testapp, func_users):
     testapp.post_json(url, data, status=422)
 
 
-def test_sign_up_in_success(testapp, valid_sign_up_users_valid_data):
+def test_sign_up_in_success(testapp, sign_up_users_valid_data):
     # sign up
     sign_up_url = url_for("api_v1.sign_up")
-    testapp.post_json(sign_up_url, valid_sign_up_users_valid_data, status=200)
+    testapp.post_json(sign_up_url, sign_up_users_valid_data, status=200)
 
     # sign in
     sign_in_url = url_for("api_v1.sign_in")
     data = {
-        "email": valid_sign_up_users_valid_data["email"],
-        "password": valid_sign_up_users_valid_data["password"],
+        "email": sign_up_users_valid_data["email"],
+        "password": sign_up_users_valid_data["password"],
     }
     testapp.post_json(sign_in_url, data, status=200)
 

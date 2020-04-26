@@ -11,8 +11,10 @@ from task_office.settings import app_config
 
 
 class BoardActionsSchema(BaseSchema):
-    name = fields.Str(required=True, allow_none=False, validate=[Length(max=255)])
-    description = fields.Str(allow_none=True, required=False, default="")
+    name = fields.Str(required=True, allow_none=False, validate=[Length(min=1, max=80)])
+    description = fields.Str(
+        allow_none=False, required=False, default="", validate=[Length(min=0, max=255)]
+    )
     is_active = fields.Boolean(default=True)
 
     class Meta:

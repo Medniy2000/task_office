@@ -68,10 +68,10 @@ SIGN_UP_USERS_INVALID_DATA = [
 
 
 @pytest.fixture(params=SIGN_UP_USERS_VALID_DATA)
-def valid_sign_up_users_valid_data(request):
+def sign_up_users_valid_data(request):
     return request.param
 
 
 @pytest.fixture(params=SIGN_UP_USERS_INVALID_DATA)
-def valid_sign_up_users_invalid_data(request):
+def sign_up_users_invalid_data(request):
     return request.param

@@ -1,3 +1,5 @@
+import random
+import string
 from typing import Any, Union, Tuple
 from uuid import UUID
 
@@ -38,14 +40,6 @@ def lookup_filter(
     return LOOKUP_MAP.get(lookup, LOOKUP_MAP.get("e"))(query, key, value)
 
 
-def is_uuid(uuid) -> bool:
-    try:
-        UUID(uuid).version
-        return True
-    except ValueError:
-        return False
-
-
 def validate_request_url_uuid(
     model: Model, key: str, uuid: str, must_exists: bool = False
 ) -> Union[Tuple, None]:
@@ -60,3 +54,15 @@ def validate_request_url_uuid(
         return non_empty_query_required(model, **{key: uuid})
 
     return None
+
+
+def generate_str(size=6, chars=string.ascii_uppercase + string.digits):
+    return "".join(random.choice(chars) for _ in range(size))
+
+
+def is_uuid(uuid) -> bool:
+    try:
+        UUID(uuid).version
+        return True
+    except ValueError:
+        return False

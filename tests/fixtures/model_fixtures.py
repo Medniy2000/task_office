@@ -49,7 +49,7 @@ def func_boards(func_users, db):
     boards = BoardFactory.create_batch(5, owner_uuid=str(user.uuid))
     db.session.commit()
 
-    class Boardx:
+    class Board:
         @staticmethod
         def get_single():
             return boards[0]
@@ -58,4 +58,4 @@ def func_boards(func_users, db):
         def get_list():
             return boards
 
-    return Boardx()
+    return Board()

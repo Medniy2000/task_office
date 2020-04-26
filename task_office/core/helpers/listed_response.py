@@ -41,7 +41,7 @@ class ListedResponseHelper:
         query = self._get_query_paginated(query, limit, offset)
 
         data = dict(self.RESPONSE_TEMPLATE)
-        if offset >= count:
+        if offset >= count and offset > 0:
             raise InvalidUsage(
                 messages=[self.error_messages["max_offset_exceeded"].format(count - 1)],
                 status_code=422,

@@ -5,7 +5,7 @@ from flask_jwt_extended import get_current_user
 
 from task_office.core.models.db_models import Permission
 from task_office.exceptions import InvalidUsage
-from task_office.extensions import cache
+from task_office.extensions.cache import cache
 from task_office.settings import app_config
 
 

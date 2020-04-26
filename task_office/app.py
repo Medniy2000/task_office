@@ -7,6 +7,7 @@ from task_office.auth.jwt_error_handlers import jwt_errors_map
 from task_office.exceptions import InvalidUsage
 from task_office.extensions.babel import babel
 from task_office.extensions.bcrypt import bcrypt
+from task_office.extensions.cache import cache
 from task_office.extensions.cors import init_cors
 from task_office.extensions.db import db
 from task_office.extensions.jwt import init_jwt
@@ -41,6 +42,7 @@ def register_extensions(app):
     db.init_app(app)
     babel.init_app(app)
     bcrypt.init_app(app)
+    cache.init_app(app, app_config.CACHE)
 
     init_jwt(app)
     init_migrate(app, db)
