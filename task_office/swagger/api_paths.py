@@ -247,6 +247,24 @@ API_PATHS = {
             },
         },
     },
+    "/api/v1/boards/<board_uuid>/columns/meta": {
+        "get": {
+            "tags": ["Columns"],
+            "summary": "Returns Boards Columns Metadata",
+            "requestBody": {
+                "description": "Boards Columns Get Metadata",
+                "required": True,
+                "content": {"application/json": {}},
+            },
+            "responses": {
+                "200": {"description": "OK"},
+                "401": {"description": "Failed. Not authorized."},
+                "403": {"description": "Failed. Not denied."},
+                "404": {"description": "Failed. Not found."},
+                "422": {"description": "Failed. Bad data."},
+            },
+        },
+    },
     "/api/v1/boards/<board_uuid>/columns/<column_uuid>": {
         "put": {
             "tags": ["Columns"],

@@ -11,7 +11,9 @@ from task_office.settings import app_config
 
 
 class ColumnPostSchema(BaseSchema):
-    name = fields.Str(required=True, allow_none=False, validate=[Length(max=120)])
+    name = fields.Str(
+        required=True, allow_none=False, validate=[Length(min=1, max=120)]
+    )
     position = fields.Integer(
         required=True, default=1, allow_none=False, validate=[Range(min=1)]
     )
@@ -21,7 +23,9 @@ class ColumnPostSchema(BaseSchema):
 
 
 class ColumnPutSchema(BaseSchema):
-    name = fields.Str(required=False, allow_none=False, validate=[Length(max=120)])
+    name = fields.Str(
+        required=False, allow_none=False, validate=[Length(min=1, max=120)]
+    )
     position = fields.Integer(required=False, allow_none=False, validate=[Range(min=1)])
 
     class Meta:

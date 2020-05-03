@@ -149,9 +149,9 @@ def get_list_columns(board_uuid, **kwargs):
     # Check board_uuid in request_url
     validate_request_url_uuid(Board, "uuid", board_uuid, True)
 
-    columns = BoardColumn.query.order_by("position", "-id").filter_by(
-        board_uuid=board_uuid
-    )
+    columns = BoardColumn.query.order_by(
+        BoardColumn.position, BoardColumn.id.asc()
+    ).filter_by(board_uuid=board_uuid)
 
     # Serialize to paginated response
     data = listed_response.serialize(
