@@ -4,7 +4,7 @@ from flask_babel import lazy_gettext as _
 
 class XEnum(Enum):
     """
-    Base Custom Enum for project
+    Base Enum for project
     """
 
     # ADMIN = 0, _('Admin'), _('Approximate quantity: format +/-')
@@ -24,6 +24,10 @@ class XEnum(Enum):
     @classmethod
     def get_names(cls):
         return [item.name for item in cls]
+
+    @classmethod
+    def get_values(cls):
+        return [item.value for item in cls]
 
     def __new__(cls, value, name, description=""):
         member = object.__new__(cls)

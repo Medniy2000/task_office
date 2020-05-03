@@ -51,8 +51,7 @@ def test_request_url_uuid_success(
 def test_request_url_uuid_failed_case1(invalid_uuid_list, testapp):
     with pytest.raises(InvalidUsage):
         uuid_hexed = invalid_uuid_list
-        url = f"http://some-host/api/v1/boards/{uuid_hexed}/"
-        request.url = url
+        request.url = url_for("api_v1.get_board", board_uuid=uuid_hexed,)
         validate_request_url_uuid(Board, "uuid", uuid_hexed, False)
 
 
