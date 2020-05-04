@@ -91,3 +91,16 @@ def test_sign_in_data__with_invalid_password(testapp, func_users):
         "password": "some_wrong_password",
     }
     testapp.post_json(sign_in_url, data, status=422)
+
+
+def test_refresh_success(testapp, auth_user):
+    url = url_for("api_v1.refresh",)
+    token = auth_user["auth_data"]["tokens"]["refresh"]["token"]
+    headers = {"Authorization": f"Bearer {token}"}
+    testapp.post_json(url, headers=headers, status=200)
+
+
+def test_refresh_failed(testapp, refresh_users_invalid_data):
+    url = url_for("api_v1.refresh",)
+    headers = {"Authorization": f"Bearer {refresh_users_invalid_data}"}
+    testapp.post_json(url, headers=headers, status=422)

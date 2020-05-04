@@ -1,5 +1,7 @@
 import pytest
 
+from task_office.core.utils import generate_str
+
 SIGN_UP_USERS_VALID_DATA = [
     {
         "password_confirm": "user11",
@@ -66,6 +68,10 @@ SIGN_UP_USERS_INVALID_DATA = [
     },
 ]
 
+REFRESH_INVALID = [
+    "", None, generate_str(25),
+]
+
 
 @pytest.fixture(params=SIGN_UP_USERS_VALID_DATA)
 def sign_up_users_valid_data(request):
@@ -74,4 +80,9 @@ def sign_up_users_valid_data(request):
 
 @pytest.fixture(params=SIGN_UP_USERS_INVALID_DATA)
 def sign_up_users_invalid_data(request):
+    return request.param
+
+
+@pytest.fixture(params=REFRESH_INVALID)
+def refresh_users_invalid_data(request):
     return request.param
