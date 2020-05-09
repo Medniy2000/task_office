@@ -62,4 +62,5 @@ pytest_plugins = [
     "tests.integration.app.auth.fixtures",
     "tests.integration.app.boards.fixtures",
     "tests.integration.app.columns.fixtures",
+    "tests.integration.app.tasks.fixtures",
 ]

@@ -69,7 +69,9 @@ SIGN_UP_USERS_INVALID_DATA = [
 ]
 
 REFRESH_INVALID = [
-    "", None, generate_str(25),
+    "",
+    None,
+    generate_str(25),
 ]
 
 
