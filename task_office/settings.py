@@ -112,19 +112,6 @@ class DevConfig(Config):
 class TestConfig(Config):
     """Test configuration."""
 
-    DATABASE = Config.DATABASE
-    DATABASE["DB_NAME"] = env.str("POSTGRES_DB_TEST", "task_office_test")
-    SQLALCHEMY_DATABASE_URI = "postgresql://{username}:{password}@{host}:{db_port}/{db_name}".format(
-        username=DATABASE["DB_USER"],
-        password=DATABASE["DB_PASSWORD"],
-        host=DATABASE["DB_HOST"],
-        db_port=DATABASE["DB_PORT"],
-        db_name=DATABASE["DB_NAME"],
-    )
-    CACHE = {
-        "CACHE_TYPE": "simple",
-    }
-
 
 MODE = os.environ.get("MODE", default="dev")
 

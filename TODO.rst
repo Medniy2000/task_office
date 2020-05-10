@@ -6,8 +6,8 @@ Issues General
 ^^^^^^^^^^^^^^
 * Try to handle all errors and wrap them by our custom error class(InvalidUsage), with using translations
 * Implement auto-generated api
-* Improve pagination
-* Configure pytest
+* Improve: app config, docker-compose-test.yaml, app config for test mode
+* Speed up tests duration
 
 Issues By Features
 ^^^^^^^^^^^^^^^^^^

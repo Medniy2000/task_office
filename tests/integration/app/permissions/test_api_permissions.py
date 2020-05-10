@@ -1,8 +1,8 @@
 import uuid
+
 from flask import url_for
 
 from task_office.core.models.db_models import Permission
-from task_office.core.utils import non_empty_query_required
 from tests.factories import UserFactory
 
 
@@ -95,7 +95,7 @@ def test_create_board_permissions(testapp, func_boards, auth_user, role_valid_da
     testapp.post_json(url, role_valid_data, headers=headers, status=200)
 
 
-def test_update_board_permission(testapp, auth_user):
+def test_update_board_permission(testapp, auth_user, func_boards):
     permission = auth_user["current_user"].perms[0]
 
     url = url_for(
