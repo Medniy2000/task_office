@@ -7,7 +7,7 @@ from factory.alchemy import SQLAlchemyModelFactory
 from factory.fuzzy import FuzzyChoice, FuzzyDateTime
 from pytz import UTC
 
-from task_office.core.models.db_models import User, Board, BoardColumn, Task
+from task_office.core.models.db_models import User, Board, BoardColumn, Task, Permission
 from task_office.extensions.db import db as _db
 
 
@@ -79,6 +79,17 @@ class TaskFactory(BaseFactory):
         model = Task
 
 
+class PermissionFactory(BaseFactory):
+    """Permission factory."""
+
+    role = FuzzyChoice(choices=Permission.Role.get_values())
+
+    class Meta:
+        """Factory configuration."""
+
+        model = Permission
+
+
 class BoardFactory(BaseFactory):
     """Board factory."""
 
@@ -91,6 +102,15 @@ class BoardFactory(BaseFactory):
             BoardColumnFactory(board_uuid=self.uuid)
             BoardColumnFactory(board_uuid=self.uuid)
             BoardColumnFactory(board_uuid=self.uuid)
+
+    @factory.post_generation
+    def perms(self, create, extracted, **kwargs):
+        if create:
+            PermissionFactory(
+                board_uuid=self.uuid,
+                user_uuid=UserFactory().uuid,
+                role=Permission.Role.EDITOR.value,
+            )
 
     class Meta:
         """Factory configuration."""

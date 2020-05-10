@@ -99,7 +99,6 @@ def update_permission(board_uuid, permission_uuid, **kwargs):
     )[1]
 
     perm.update(updated_at=datetime.utcnow(), **data)
-    perm.save()
     reset_permissions(uuid.UUID(perm.user_uuid).hex)
     return perm
 

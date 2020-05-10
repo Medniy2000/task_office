@@ -48,6 +48,7 @@ services:
   redis_service:
     container_name: redis_1
     image: redis
+    command: redis-server --requirepass ${CACHE_REDIS_PASSWORD}
     env_file:
       - .env
 
