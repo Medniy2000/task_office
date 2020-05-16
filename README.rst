@@ -43,6 +43,10 @@ To run app with docker use::
         $ docker-compose -f docker-compose-tests.yml rm -fsv
 
 
+API docs url::
+
+    <hostname>/api/v1/docs
+
 Run the following commands to create your app's
 database tables and perform the initial migration ::
 
@@ -66,5 +70,4 @@ Translations commands::
 
     # Compile translations
     pybabel compile -d translations
-
 
