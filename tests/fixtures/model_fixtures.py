@@ -8,7 +8,6 @@ from tests.factories import UserFactory, BoardFactory, PermissionFactory
 def func_users(db):
     """A users for the tests."""
     users = UserFactory.create_batch(3)
-    db.session.commit()
 
     class User:
         @staticmethod

@@ -4,6 +4,8 @@
 *.so
 
 .idea*
+.env
+
 # Local development ignores
 venv
 data.sqlite
