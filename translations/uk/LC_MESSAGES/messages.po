@@ -1,0 +1,146 @@
+# Ukrainian translations for PROJECT.
+# Copyright (C) 2020 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2020-04-06 08:46+0300\n"
+"PO-Revision-Date: 2020-01-04 15:13+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: uk\n"
+"Language-Team: uk <LL@li.org>\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.8.0\n"
+
+#: task_office/auth/jwt_error_handlers.py:44
+msgid "Token has been revoked"
+msgstr "Токен був відхилений"
+
+#: task_office/auth/jwt_error_handlers.py:48
+msgid "Fresh token required"
+msgstr "Фреш токен необхідно"
+
+#: task_office/auth/jwt_error_handlers.py:57
+msgid "Error loading the user {}"
+msgstr "Помилка завантаження користувача {}"
+
+#: task_office/auth/jwt_error_handlers.py:63
+msgid "User claims verification failed"
+msgstr "Верифікація даних користувача провалена"
+
+#: task_office/auth/schemas.py:25
+msgid "Passwords do not match"
+msgstr "Паролі не збігються"
+
+#: task_office/auth/schemas.py:55
+msgid "User not found"
+msgstr "Користувач не знайдений"
+
+#: task_office/auth/utils.py:57 task_office/permissions/views.py:69
+#: task_office/permissions/views.py:99
+msgid "Not allowed"
+msgstr "Не дозволено"
+
+#: task_office/columns/views.py:60 task_office/tasks/views.py:79
+msgid "Must be between {} and {}"
+msgstr "Повинний бути між {} і {}"
+
+#: task_office/columns/views.py:71 task_office/columns/views.py:121
+#: task_office/core/validators.py:10 task_office/tasks/views.py:93
+#: task_office/tasks/views.py:163
+msgid "Already exists with value {}"
+msgstr "Вже існує із значенням {}"
+
+#: task_office/columns/views.py:108 task_office/tasks/views.py:142
+msgid "Must be between {} and {}."
+msgstr "Повинний бути між {} і {}."
+
+#: task_office/core/enums.py:43
+msgid "Ascend"
+msgstr "Збільшення"
+
+#: task_office/core/enums.py:44
+msgid "Descend"
+msgstr "Зменшення"
+
+#: task_office/core/utils.py:23 task_office/core/utils.py:53
+#: task_office/core/utils.py:57 task_office/permissions/views.py:36
+#: task_office/permissions/views.py:58 task_office/permissions/views.py:92
+#: task_office/permissions/views.py:124 task_office/permissions/views.py:147
+msgid "Not found"
+msgstr "Не знайдено"
+
+#: task_office/core/utils.py:31
+msgid "Already exists"
+msgstr "Вже існує"
+
+#: task_office/core/validators.py:37
+msgid "Not found with value {}"
+msgstr "Не знайдено із значенням {}"
+
+#: task_office/core/helpers/listed_response.py:10
+msgid "Max value {} exceeded"
+msgstr "Максимальне значення {} перевищено"
+
+#: task_office/core/models/db_models.py:76
+msgid "Owner"
+msgstr "Власник"
+
+#: task_office/core/models/db_models.py:76
+msgid "Owner of board(creator)"
+msgstr "Власник дошки(творець)"
+
+#: task_office/core/models/db_models.py:77
+msgid "Editor"
+msgstr "Редактор"
+
+#: task_office/core/models/db_models.py:77
+msgid "Editor of board"
+msgstr "Редактор дошки"
+
+#: task_office/core/models/db_models.py:78
+msgid "Staff"
+msgstr "Персонал"
+
+#: task_office/core/models/db_models.py:78
+msgid "Ordinary user"
+msgstr "Звичайний користувач"
+
+#: task_office/core/models/db_models.py:130
+msgid "New"
+msgstr "Новий"
+
+#: task_office/core/models/db_models.py:131
+msgid "In process"
+msgstr "В процесі"
+
+#: task_office/core/models/db_models.py:132
+msgid "Rejected"
+msgstr "Відхилено"
+
+#: task_office/core/models/db_models.py:133
+msgid "Done"
+msgstr "Завершено"
+
+#: task_office/tasks/schemas/basic_schemas.py:130
+#: task_office/tasks/schemas/basic_schemas.py:132
+#: task_office/tasks/schemas/basic_schemas.py:180
+msgid "ascending"
+msgstr "Збільшення"
+
+#: task_office/tasks/schemas/basic_schemas.py:131
+#: task_office/tasks/schemas/basic_schemas.py:133
+#: task_office/tasks/schemas/basic_schemas.py:181
+msgid "descending"
+msgstr "Зменшення"
+
+#~ msgid "Max limit {} exceeded"
+#~ msgstr "Максимальне обмеження {} перевищено"
+

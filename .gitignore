@@ -3,7 +3,9 @@
 # C extensions
 *.so
 
-.idea/*
+.idea*
+.env
+
 # Local development ignores
 venv
 data.sqlite

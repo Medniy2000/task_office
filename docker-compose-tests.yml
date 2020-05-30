@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+
+  web_service:
+    container_name: web_1_test
+    env_file:
+      - .env
+    environment:
+      MODE: "test"
+    build:
+        context: ./
+        dockerfile: .deploy/local/api/Dockerfile
+    command: >
+      bash -c "flask db upgrade && pytest -s -v --cov=task_office tests/"
+    volumes:
+      - ./:/app
+    expose:
+      - 8000
+    depends_on:
+      - postgres_service
+      - redis_service
+
+  postgres_service:
+    container_name: postgres_1_test
+    image: postgres
+    env_file:
+      - .env
+
+  redis_service:
+    container_name: redis_1_test
+    image: redis
+    command: redis-server --requirepass ${CACHE_REDIS_PASSWORD}
+    env_file:
+      - .env
