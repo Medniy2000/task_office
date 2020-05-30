@@ -2,7 +2,7 @@ version: '3'
 
 services:
 
-  web_service_test:
+  web_service:
     container_name: web_1_test
     env_file:
       - .env
@@ -18,16 +18,16 @@ services:
     expose:
       - 8000
     depends_on:
-      - postgres_service_test
-      - redis_service_test
+      - postgres_service
+      - redis_service
 
-  postgres_service_test:
+  postgres_service:
     container_name: postgres_1_test
     image: postgres
     env_file:
       - .env
 
-  redis_service_test:
+  redis_service:
     container_name: redis_1_test
     image: redis
     command: redis-server --requirepass ${CACHE_REDIS_PASSWORD}

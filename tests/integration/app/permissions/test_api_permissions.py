@@ -1,5 +1,6 @@
 import uuid
 
+import pytest
 from flask import url_for
 
 from task_office.core.models.db_models import Permission
@@ -84,15 +85,19 @@ def test_get_board_permissions_meta(testapp, func_boards, auth_user):
     testapp.get(url, headers=headers, status=200)
 
 
-def test_create_board_permissions(testapp, func_boards, auth_user, role_valid_data):
+PERMISSIONS_VALID_DATA = [{"role": role} for role in Permission.Role.get_values()]
+
+
+@pytest.mark.parametrize("data", PERMISSIONS_VALID_DATA)
+def test_create_board_permissions(testapp, func_boards, auth_user, data):
     board = func_boards.get_single()
     url = url_for("api_v1.create_permission", board_uuid=board.uuid)
-    role_valid_data["user_uuid"] = UserFactory().uuid
+    data["user_uuid"] = UserFactory().uuid
 
     token = auth_user["auth_data"]["tokens"]["access"]["token"]
     headers = {"Authorization": f"Bearer {token}"}
 
-    testapp.post_json(url, role_valid_data, headers=headers, status=200)
+    testapp.post_json(url, data, headers=headers, status=200)
 
 
 def test_update_board_permission(testapp, auth_user, func_boards):

@@ -17,7 +17,7 @@ class Config(object):
     APP_DIR = os.path.abspath(os.path.dirname(__file__))
     PROJECT_ROOT = os.path.abspath(os.path.join(APP_DIR, os.pardir))
 
-    READ_DOT_ENV_FILE = env.bool("FLASK_READ_DOT_ENV_FILE", default=False)
+    READ_DOT_ENV_FILE = env.bool("FLASK_READ_DOT_ENV_FILE", default=True)
     if READ_DOT_ENV_FILE:
         # OS environment variables take precedence over variables from .env
         env.read_env(os.path.join(PROJECT_ROOT, ".env"))
